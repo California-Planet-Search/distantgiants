@@ -281,6 +281,7 @@ def isObservable(dates, obs, target, minElevation=30, twilight=12, oversamp=1):
 
 def keck_limits(alt_list, az_list):
     """
+    Added by Judah. This function is to refine the limits used by isObservable.
     Alt and Az expected in radians.
     """
     alt_list = np.array(alt_list)*(180/np.pi)
@@ -292,7 +293,6 @@ def keck_limits(alt_list, az_list):
     
     return alt_list > min_alt_list
     
-#target.compute(obs)
     
 def isNumeric(input, cast=None):
     """Simple test for whether input is numeric or not.
