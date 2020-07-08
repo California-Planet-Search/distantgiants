@@ -1,8 +1,7 @@
-Total requested time = 17069 seconds = 4 hr 44 min 29.0 sec
+Total requested time = 16915 seconds = 4 hr 41 min 55.0 sec
  
         T001279 12 20 15.1 +56 12 05 2000 vmag=10.7  322/ 900  60k C2 1x  in p2 DG ** Jitter test
         T001451 12 26 05.8 +61 15 32 2000  vmag=9.6  114/ 500  60k B5 1x  in p2 DG ** Jitter test
-         110067 12 39 21.4 +20 01 38 2000  vmag=8.4   39/ 500  60k B5 1x  in p2 DG ** Jitter test
         T001435 13 34 09.1 +67 37 16 2000 vmag=10.6  298/ 600  60k C2 1x  in p2 DG ** Jitter test
        HIP70705 14 27 41.8 +41 57 13 2000  vmag=9.9  153/ 500  60k B5 1x  in p2 DG ** Jitter test
         T001691 18 09 37.0 +86 51 37 2000 vmag=10.1  188/ 500  60k C2 1x  in p2 DG ** Jitter test
@@ -26,4 +25,3 @@ Total requested time = 17069 seconds = 4 hr 44 min 29.0 sec
         T001609 19 14 42.1 +60 40 15 2000 vmag=10.8  992/2700 250k B3 1x out p3 DG ** template please add B-stars
          192279 20 12 17.5 +44 29 45 2000 vmag=10.3  629/1500 250k B3 1x out p3 DG ** template please add B-stars
          347039 20 37 24.9 +22 39 15 2000  vmag=9.4  269/ 600 250k B1 1x out p3 DG ** template please add B-stars
-         207897 21 40 44.8 +84 20 01 2000  vmag=8.4   37/ 500  60k B5 1x  in p2 DG Cadence RV for TKS Distant Giants

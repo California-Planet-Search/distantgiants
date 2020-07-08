@@ -16,7 +16,7 @@ import tks_distantgiants_spec as spec
 
 def make_distantgiants():
     
-    distantgiants_spec = spec.make_distantgiants_spec()
+    distantgiants_spec = pd.read_csv('csv/distantgiants_spec.csv')
     observing_priorities = pd.read_csv('../tks_target_list_gen/prioritization/results/observing_priorities.csv')
 
     distantgiants = pd.merge(observing_priorities['tic'], distantgiants_spec, how = 'inner', on = 'tic')
