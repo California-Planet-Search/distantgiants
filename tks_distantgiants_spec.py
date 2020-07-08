@@ -6,7 +6,7 @@ Module to generate the tks_distgiants target list, which comprises all stars fro
 spectroscopic vetting. These are then written out to the jump-config/programs folder on Github.
 
 Written: June 1, 2020
-Last modified: June 19, 2020
+Last modified: July 8, 2020
 """
 
 
@@ -24,8 +24,8 @@ def make_distantgiants_spec():
     Then pushes the changes made to tks_distgiants.txt to the jump-config Github.
     """
     
-    jump_df = pd.read_csv('/Users/judahvz/research/code/distant_giants_code/csv_files/candidates.csv')
-    distantgiants_photo = pd.read_csv('/Users/judahvz/research/code/csv_files/distantgiants_photo.csv')
+    jump_df = pd.read_csv('csv/candidates.csv')
+    distantgiants_photo = pd.read_csv('csv/distantgiants_photo.csv')
     
     jump_df = jump_df.drop_duplicates(subset='Name')
     jump_df['vsini'].replace(np.nan, -100, inplace = True)
@@ -46,13 +46,13 @@ def make_distantgiants_spec():
     distantgiants_spec.rename(columns = {'Name':'star_id'}, inplace = 'True')
     # spec_cuts.at[pd.Index(spec_cuts['star_id']).get_loc('55CNC'), 'star_id'] = '75732'
     
-    distantgiants_spec.to_csv('/Users/judahvz/research/code/csv_files/distantgiants_spec.csv', index = False)
+    distantgiants_spec.to_csv('csv/distantgiants_spec.csv', index = False)
     
     return distantgiants_spec
     
     
 def update_distantgiants_spec(distantgiants_spec):
-    out_file = open('/Users/judahvz/research/code/GitHub/jump-config/programs/tks_distantgiants_spec.txt', 'w+')
+    out_file = open('../jump-config/programs/tks_distantgiants_spec.txt', 'w+')
 
     for star_name in distantgiants_spec.sort_values(by = 'star_id').star_id.values:
         out_file.write(star_name+'\n')
@@ -61,7 +61,7 @@ def update_distantgiants_spec(distantgiants_spec):
     out_file.close()
 
     
-    jump_config_path = r'/Users/judahvz/research/code/GitHub/jump-config'
+    jump_config_path = r'../jump-config'
     commit_message = 'Updated distantgiants_spec.txt'
     
     my_repo = repo.Repo(jump_config_path) # Path to jump_config repo

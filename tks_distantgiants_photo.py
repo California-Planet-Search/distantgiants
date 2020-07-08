@@ -6,7 +6,7 @@ Module to generate the tks_distgiants_pool target list, which comprises all star
 pre-spectroscopic vetting. These are then written out to the jump-config/programs folder on Github.
 
 Written: June 1, 2020
-Last modified: June 19, 2020
+Last modified: July 8, 2020
 """
 
 import pandas as pd
@@ -30,12 +30,12 @@ def make_distantgiants_photo():
     
     Pushes the changes made to tks_distgiants_photo.txt to the jump-config Github.
     """
-    tois_perfect_location = '/Users/judahvz/research/code/GitHub/tks_target_list_gen/prioritization/info/TOIs_perfect.csv'
+    tois_perfect_location = '../tks_target_list_gen/prioritization/info/TOIs_perfect.csv'
     column_changes = {'cps_name':'cps', 'm_s':'smass', 'r_s':'sradius'}
     tois_perfect = pd.read_csv(tois_perfect_location).rename(columns = column_changes)
     tois_perfect = tois_perfect[['tic','toi','cps','ra','dec','vmag','smass','sradius','t_eff','evol','ruwe','rp']]
 
-    tks_drop = pd.read_csv('/Users/judahvz/research/code/distant_giants_code/csv_files/tks_drop.csv')
+    tks_drop = pd.read_csv('csv/tks_drop.csv')
 
     for column in ['dec', 'smass', 't_eff', 'ruwe', 'vmag', 'rp']:
         tois_perfect['{}'.format(column)] = tois_perfect['{}'.format(column)].astype(float)
@@ -52,12 +52,12 @@ def make_distantgiants_photo():
     distantgiants_photo = distantgiants_photo[~distantgiants_photo['cps'].isin(tks_drop['Name'])].reset_index(drop = True) # Drop any stars that are in tks_drop
     
     
-    distantgiants_photo.to_csv('/Users/judahvz/research/code/csv_files/distantgiants_photo.csv', index = False)
+    distantgiants_photo.to_csv('csv/distantgiants_photo.csv', index = False)
     
     return distantgiants_photo
 
 def update_distantgiants_photo(distantgiants_photo):
-    out_file = open('/Users/judahvz/research/code/GitHub/jump-config/programs/tks_distantgiants_photo.txt', 'w+')
+    out_file = open('../jump-config/programs/tks_distantgiants_photo.txt', 'w+')
 
     for star_name in distantgiants_photo.sort_values(by = 'cps').cps.values:
         out_file.write(star_name+'\n')
@@ -66,7 +66,7 @@ def update_distantgiants_photo(distantgiants_photo):
     out_file.close()
 
     
-    jump_config_path = r'/Users/judahvz/research/code/GitHub/jump-config'
+    jump_config_path = r'../jump-config'
     commit_message = 'Updated distantgiants_photo.txt'
     
     my_repo = repo.Repo(jump_config_path) # Path to jump_config repo

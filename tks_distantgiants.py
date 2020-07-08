@@ -6,7 +6,7 @@ Module to update tks_distantgiants.txt on GitHub and generate the distantgiants.
 that have been chosen by Ashley Chontos's prioritization code and can therefore be requested for observations.
 
 Written: June 19, 2020
-Last modified: June 19, 2020
+Last modified: July 8, 2020
 """
 
 import numpy as np
@@ -17,18 +17,18 @@ import tks_distantgiants_spec as spec
 def make_distantgiants():
     
     distantgiants_spec = spec.make_distantgiants_spec()
-    observing_priorities = pd.read_csv('/Users/judahvz/research/code/GitHub/tks_target_list_gen/prioritization/results/observing_priorities.csv')
+    observing_priorities = pd.read_csv('../tks_target_list_gen/prioritization/results/observing_priorities.csv')
 
     distantgiants = pd.merge(observing_priorities['tic'], distantgiants_spec, how = 'inner', on = 'tic')
 
-    distantgiants.to_csv('/Users/judahvz/research/code/csv_files/distantgiants.csv', index = False)
+    distantgiants.to_csv('csv/distantgiants.csv', index = False)
     
     return distantgiants
     
     
 def update_distantgiants(distantgiants):
     
-    out_file = open('/Users/judahvz/research/code/GitHub/jump-config/programs/tks_distantgiants.txt', 'w+')
+    out_file = open('../jump-config/programs/tks_distantgiants.txt', 'w+')
 
     for star_name in distantgiants.sort_values(by = 'star_id').star_id.values:
         out_file.write(star_name+'\n')
@@ -37,7 +37,7 @@ def update_distantgiants(distantgiants):
     out_file.close()
 
     
-    jump_config_path = r'/Users/judahvz/research/code/GitHub/jump-config'
+    jump_config_path = r'../jump-config'
     commit_message = 'Updated distantgiants.txt'
     
     my_repo = repo.Repo(jump_config_path) # Path to jump_config repo

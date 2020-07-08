@@ -6,7 +6,7 @@ This module updates the tks_distantgiants_pool.txt and tks_distantgiants.txt fil
 overview.csv file and updating the list of observing requests for the SC2A program.
 
 Written: June 1, 2020
-Last modified: June 19, 2020
+Last modified: July 8, 2020
 """
 
 import tks_distantgiants_photo as tks_photo

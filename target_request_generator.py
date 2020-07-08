@@ -5,7 +5,7 @@ Python 3
 This module generates a list of observing requests based on the current status of each star in the SC2A program.
 
 Written: June 1, 2020
-Last modified: June 20, 2020
+Last modified: July 8, 2020
 """
 
 import pandas as pd
@@ -28,19 +28,12 @@ from tks_distantgiants import make_distantgiants
 from astroplan import download_IERS_A
 
 
-def init_overview():
+def init_overview(iers = False):
     
-    # download_IERS_A()
+    if iers == True:
+        download_IERS_A()
     
-    overview_df = make_overview(plot=False)
-    # distantgiants = make_distantgiants()
-    
-    # Get info like ra and dec for each target. But inner join to only get targets in distantgiants.
-    # overview_df = overview_df.merge(distantgiants[['star_id', 'vmag', 'ra', 'dec']], on = 'star_id')
-    # overview_df = overview_df.merge(distantgiants[['star_id', 'vmag']], on = 'star_id')
-    # overview_df['ra'] = overview_df['ra']*15
-    # overview_df = overview_df.rename(columns = {'ra':'ra_deg', 'dec':'dec_deg'})
-    
+    overview_df = make_overview(plot=False) 
     
     return overview_df
 
@@ -50,8 +43,6 @@ def obs_request_list_gen(overview_df, day):
     This function uses the current status of each target in overview_df (jitter, template, recon status as well as 
     time since last RV obs) to create a list of stars that need each type of observation. These are  fed to the generator
     function to be turned into actual script lines.
-    overview_df comes from SC2A_overview, but it needs to be merged with all_TOIs beforehand to get ra, dec, etc.
-    day is the desired UTC date of observation: a string in the form 'yyyy-mm-dd'
     """
     overview_df = overview_df.sort_values(by = 'ra_deg').reset_index(drop = True)
     
@@ -146,7 +137,7 @@ def generator(star_requests):
     
     date_list = Time.now().iso.split(' ')[0]
     
-    out_file = open('/Users/judahvz/research/observing_target_requests/VanZandt_'+date_list+'.txt', 'w+')
+    out_file = open('observing_requests/'+date_list+'.txt', 'w+')
     
     list_of_line_lists = []
     
