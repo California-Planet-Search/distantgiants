@@ -21,6 +21,8 @@ from astropy.coordinates import SkyCoord
 import ephem
 import observing as obs
 
+import distantgiants
+
 
 
 
@@ -30,8 +32,8 @@ def make_overview(plot = False):
     information about each target in SC2A.
     """
     
-    distantgiants_spec = pd.read_csv('/Users/judahvz/research/code/csv_files/distantgiants_spec.csv')
-    sql_df = pd.read_csv('/Users/judahvz/research/code/distant_giants_code/csv_files/Distant_Giants_Observing_Requests.csv')
+    distantgiants_spec = pd.read_csv('csv/distantgiants_spec.csv')
+    sql_df = pd.read_csv('csv/Distant_Giants_Observing_Requests.csv')
 
     sql_df = pd.merge(distantgiants_spec, sql_df, on = 'star_id', how = 'inner')
 
@@ -346,13 +348,15 @@ def make_overview(plot = False):
                                  color = 'blue', s = 10, zorder=z_order_list.index('rv_pts'))  
 
 
-        ax.plot((Time.now().jd, Time.now().jd), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dashed')
+        line_today, = ax.plot((Time.now().jd, Time.now().jd), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dashed')
+        line_15, = ax.plot((Time.now().jd-15, Time.now().jd-15), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dotted')
+        line_25, = ax.plot((Time.now().jd-25, Time.now().jd-25), (y_length[0], y_length[-1]), c = 'black', linestyle = 'dashdot')
 
         plt.xticks(date_intervals_jd, date_intervals_iso)
 
 
         plt.yticks([], [], size = 14)
-        ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs], ['Recon', 'Jitter', 'HIRES', 'APF'], loc = (0.28,1.02), prop = {'size':20}, ncol = 4);
+        ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15], ['Recon', 'Jitter', 'HIRES', 'APF', 'Today', '25', '15'], loc = (0.28,1.02), prop = {'size':10}, ncol = 4);
         plt.savefig('/Users/judahvz/research/code/distant_giants_code/csv_files/overview_plot.pdf')
         plt.show()
         
