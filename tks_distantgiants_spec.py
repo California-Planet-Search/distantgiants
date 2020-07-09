@@ -33,6 +33,7 @@ def make_distantgiants_spec():
     jump_df['rp'].replace(np.nan, -100, inplace = True)
     jump_df = jump_df.drop(index = jump_df.query("Name == 'T001244'").index.values) # Remove T001244, which has vmag = 11.9
     jump_df = jump_df.drop(index = jump_df.query("Name == 'T001538'").index.values) # Remove T001538, which has a bad TESS light curve
+    jump_df = jump_df.drop(index = jump_df.query("Name == '1300'").index.values) # Remove 1300, which has a bad TESS light curve
     
     
     distantgiants_photo = pd.merge(jump_df.drop(columns = 'vmag'), distantgiants_photo[['cps', 'Vmag']], left_on = 'Name', right_on = 'cps', how = 'right').rename(columns = {'Vmag':'vmag'})
