@@ -357,7 +357,7 @@ def make_overview(plot = False):
 
         plt.yticks([], [], size = 14)
         ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15], ['Recon', 'Jitter', 'HIRES', 'APF', 'Today', '25', '15'], loc = (0.28,1.02), prop = {'size':10}, ncol = 4);
-        plt.savefig('/Users/judahvz/research/code/distant_giants_code/csv_files/overview_plot.pdf')
+        plt.savefig('csv/overview_plot.pdf')
         plt.show()
         
     
@@ -365,7 +365,7 @@ def make_overview(plot = False):
 
 def update_overview(overview_df):
     
-    overview_df.to_csv('/Users/judahvz/research/code/distant_giants_code/csv_files/overview_df.csv', index = False)
+    overview_df.to_csv('csv/overview_df.csv', index = False)
     
     print('Updated overview_df.csv')
 

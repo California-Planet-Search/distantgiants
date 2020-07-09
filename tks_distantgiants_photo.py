@@ -16,7 +16,6 @@ warnings.filterwarnings('ignore')
 import gspread
 from git import repo
 
-from oauth2client.service_account import ServiceAccountCredentials
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 
