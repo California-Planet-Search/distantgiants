@@ -206,8 +206,8 @@ def make_overview(plot = False):
         jitter_pts = ax.scatter(plot_df['bjd_jitter'], y_length, color = jitter_color, s=6, zorder = z_order_list.index('jitter_pts'))
 
 
-        ax.text(end_date+10, y_length[0]+1, 'Template?', size = 8)
-        ax.text(start_date-20, y_length[0]+1, 'Jitter?', size = 8)
+        ax.text(end_date+13, y_length[0]+1, 'Template?', size = 8)
+        ax.text(start_date-27, y_length[0]+1, 'Jitter?', size = 8)
         cooked = [] # List determining which stars already have significant obs and shouldn't be observed
         
         for i in range(len(plot_df)):
@@ -224,10 +224,10 @@ def make_overview(plot = False):
 
 
             # Open or closed circle to show template status
-            ax.scatter(end_date+17, y_length[i], s=10, marker = 'o', color = 'k', facecolors = template_facecolors, clip_on=False)
+            ax.scatter(end_date+22, y_length[i], s=10, marker = 'o', color = 'k', facecolors = template_facecolors, clip_on=False)
 
             # Open or closed circle to show jitter status
-            ax.scatter(start_date-17, y_length[i], s=10, marker = 'o', color = 'k', facecolors = jitter_facecolors, clip_on=False)
+            ax.scatter(start_date-22, y_length[i], s=10, marker = 'o', color = 'k', facecolors = jitter_facecolors, clip_on=False)
 
             # Put star name on right and left vertical axes, with cooked targets faded
             if plot_df['cooked?'][i] == 'cookin':
@@ -248,7 +248,8 @@ def make_overview(plot = False):
             
             ### Observability ###
             observability = True
-            if i in [0,1,2]:
+            # Plotting observability bars takes a while; pick how many stars you want bars for here.
+            if i in [0]:
                 
                 star_name = plot_df['star_id'][i]
                 ra_deg = plot_df['ra_deg'][i]
@@ -352,11 +353,11 @@ def make_overview(plot = False):
         line_15, = ax.plot((Time.now().jd-15, Time.now().jd-15), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dotted')
         line_25, = ax.plot((Time.now().jd-25, Time.now().jd-25), (y_length[0], y_length[-1]), c = 'black', linestyle = 'dashdot')
 
-        plt.xticks(date_intervals_jd, date_intervals_iso)
+        plt.xticks(date_intervals_jd, date_intervals_iso, fontsize = 5)
 
 
         plt.yticks([], [], size = 14)
-        ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15], ['Recon', 'Jitter', 'HIRES', 'APF', 'Today', '25', '15'], loc = (0.28,1.02), prop = {'size':10}, ncol = 4);
+        ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15], ['Recon', 'Jitter', 'HIRES', 'APF', 'Today', '25', '15'], loc = (0.24,1.02), prop = {'size':10}, ncol = 4);
         plt.savefig('csv/overview_plot.pdf')
         plt.show()
         
