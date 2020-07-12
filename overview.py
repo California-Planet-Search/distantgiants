@@ -358,7 +358,7 @@ def make_overview(plot = False):
 
         plt.yticks([], [], size = 14)
         ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15], ['Recon', 'Jitter', 'HIRES', 'APF', 'Today', '25', '15'], loc = (0.24,1.02), prop = {'size':10}, ncol = 4);
-        plt.savefig('csv/overview_plot.pdf')
+        plt.savefig('csv/overview_plot.jpg', dpi = 500, quality=95)
         plt.show()
         
     
