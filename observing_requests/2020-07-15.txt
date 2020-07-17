@@ -1,0 +1,11 @@
+Total requested time = 1366 seconds = 0 hr 22 min 46.0 sec
+ 
+		## RVs ##
+        T001669 03 03 49.6 +83 35 14 2000 vmag=10.2  204/ 500  60k C2 1x  in p2 DG Cadence RV for TKS Distant Giants
+          85426 09 52 38.9 +35 06 40 2000  vmag=8.2   33/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+          87620 10 07 13.7 +46 06 54 2000  vmag=9.3   88/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001768 10 08 24.7 +55 32 24 2000 vmag=10.4  245/ 500  60k C2 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001772 10 27 21.1 +34 23 27 2000 vmag=10.0  160/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001279 12 20 15.1 +56 12 05 2000 vmag=10.7  322/ 900  60k C2 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001794 13 33 35.4 +49 03 39 2000 vmag=10.3  224/ 500  60k C2 1x  in p3 DG Cadence RV for TKS Distant Giants
+         146757 16 13 57.3 +63 31 60 2000  vmag=9.3   90/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants

@@ -249,7 +249,7 @@ def make_overview(plot = False):
             ### Observability ###
             observability = True
             # Plotting observability bars takes a while; pick how many stars you want bars for here.
-            if i in [0]:
+            if observability:
                 
                 star_name = plot_df['star_id'][i]
                 ra_deg = plot_df['ra_deg'][i]

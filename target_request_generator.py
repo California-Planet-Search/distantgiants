@@ -110,7 +110,7 @@ def obs_request_list_gen(overview_df, day):
     
                 if (hires_never or hires_days > 25)\
                 and (apf_never or apf_days > 25):
-                    prio = 2
+                    prio = 1
                 elif (hires_never or hires_days > 20)\
                 and (apf_never or apf_days > 20):
                     prio = 2
@@ -195,6 +195,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** Jitter test'
+                v_mag = 0
 
             elif obs_type == 'template':
                 iodine = 'out'
@@ -209,6 +210,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** template please add B-stars'
+                v_mag = 0
 
             elif obs_type == 'rv':
                 iodine = 'in'

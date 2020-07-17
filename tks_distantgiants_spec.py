@@ -32,8 +32,6 @@ def make_distantgiants_spec():
     jump_df['logrhk'].replace(np.nan, -100, inplace = True)
     jump_df['rp'].replace(np.nan, -100, inplace = True)
     jump_df = jump_df.drop(index = jump_df.query("Name == 'T001244'").index.values) # Remove T001244, which has vmag = 11.9
-    jump_df = jump_df.drop(index = jump_df.query("Name == 'T001538'").index.values) # Remove T001538, which has a bad TESS light curve
-    jump_df = jump_df.drop(index = jump_df.query("Name == '1300'").index.values) # Remove 1300, which has a bad TESS light curve
     
     
     distantgiants_photo = pd.merge(jump_df.drop(columns = 'vmag'), distantgiants_photo[['cps', 'Vmag']], left_on = 'Name', right_on = 'cps', how = 'right').rename(columns = {'Vmag':'vmag'})
@@ -46,6 +44,10 @@ def make_distantgiants_spec():
     distantgiants_spec = distantgiants_photo.query('vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
     distantgiants_spec.rename(columns = {'Name':'star_id'}, inplace = 'True')
     # spec_cuts.at[pd.Index(spec_cuts['star_id']).get_loc('55CNC'), 'star_id'] = '75732'
+    
+    no_no = ['1300', 'T001538', '97658', '110067', '192279', 'T000561', 'T001386', 'T001391', 
+             'T001504', 'T001537', 'T001609', 'T001648', 'T001655', 'T001699', 'T001711']
+    distantgiants_spec = distantgiants_spec.drop(distantgiants_spec.index[distantgiants_spec['star_id'].isin(no_no)])
     
     distantgiants_spec.to_csv('csv/distantgiants_spec.csv', index = False)
     
