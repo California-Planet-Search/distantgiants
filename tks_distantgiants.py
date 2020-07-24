@@ -18,9 +18,11 @@ def make_distantgiants():
     
     distantgiants_spec = pd.read_csv('csv/distantgiants_spec.csv')
     observing_priorities = pd.read_csv('../tks_target_list_gen/prioritization/results/observing_priorities.csv')
-
-    distantgiants = pd.merge(observing_priorities['tic'], distantgiants_spec, how = 'inner', on = 'tic')
-
+    
+    # The following are columns that I want displayed in the distantgiants paper
+    relevant_columns = ['tic', 'star_id', 'toi', 'ra', 'dec', 'vmag', 'teff', 'mass', 'radius', 'vsini', 'svalue', 'logrhk', 'ruwe', 'per', 'rp']
+    distantgiants = pd.merge(observing_priorities['tic'], distantgiants_spec, how = 'inner', on = 'tic')[relevant_columns].sort_values(by='toi')
+    
     distantgiants.to_csv('csv/distantgiants.csv', index = False)
     
     return distantgiants

@@ -1,0 +1,24 @@
+Total requested time = 7539 seconds = 2 hr 5 min 39.0 sec
+ 
+ 		## Jitter requests for the whole run ##
+       HIP70705 14 27 41.8 +41 57 13 2000  vmag=9.9  153/ 500  60k B5 1x  in p2 DG ** Jitter test
+        T001691 18 09 37.0 +86 51 37 2000 vmag=10.1  188/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001410 22 19 31.9 +42 33 37 2000 vmag=11.1  463/1200  60k C2 1x  in p2 DG ** Jitter test
+        T001422 23 36 57.8 +39 38 21 2000 vmag=10.6  295/ 600  60k C2 1x  in p2 DG ** Jitter test
+		
+		## Template requests for the whole run ##
+        T001669 03 03 49.6 +83 35 14 2000 vmag=10.2  594/1200 250k B3 1x out p3 DG ** template please add B-stars
+        T001768 10 08 24.7 +55 32 24 2000 vmag=10.4  715/1500 250k B3 1x out p3 DG ** template please add B-stars
+        T001772 10 27 21.1 +34 23 27 2000 vmag=10.0  466/1200 250k B1 1x out p3 DG ** template please add B-stars
+          93963 10 51 06.4 +25 38 28 2000  vmag=9.2  229/ 500 250k B1 1x out p3 DG ** template please add B-stars
+        T001794 13 33 35.4 +49 03 39 2000 vmag=10.3  652/1500 250k B3 1x out p3 DG ** template please add B-stars
+		
+		## Nightly RV requests ##
+        T001669 03 03 49.6 +83 35 14 2000 vmag=10.2  204/ 500  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001768 10 08 24.7 +55 32 24 2000 vmag=10.4  245/ 500  60k C2 1x  in p2 DG Cadence RV for TKS Distant Giants
+        T001772 10 27 21.1 +34 23 27 2000 vmag=10.0  160/ 500  60k B5 1x  in p2 DG Cadence RV for TKS Distant Giants
+          93963 10 51 06.4 +25 38 28 2000  vmag=9.2   78/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001279 12 20 15.1 +56 12 05 2000 vmag=10.7  322/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001794 13 33 35.4 +49 03 39 2000 vmag=10.3  224/ 500  60k C2 1x  in p2 DG Cadence RV for TKS Distant Giants
+         156141 17 09 18.9 +71 52 36 2000  vmag=8.9   58/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001422 23 36 57.8 +39 38 21 2000 vmag=10.6  295/ 600  60k C2 1x  in p2 DG Cadence RV for TKS Distant Giants

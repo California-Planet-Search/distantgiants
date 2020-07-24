@@ -195,7 +195,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** Jitter test'
-                v_mag = 0
+            
 
             elif obs_type == 'template':
                 iodine = 'out'
@@ -210,7 +210,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** template please add B-stars'
-                v_mag = 0
+                
 
             elif obs_type == 'rv':
                 iodine = 'in'

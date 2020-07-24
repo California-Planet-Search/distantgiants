@@ -46,6 +46,7 @@ def make_distantgiants_photo():
     tois_perfect = tois_perfect.query('dec > 0 and t_eff < 6250 and evol=="MS" and ruwe < 1.3 and vmag <= 11.5 and rp < 10 and smass > 0.5 and smass < 1.5')
     tois_perfect = tois_perfect.rename(columns = {'vmag' : 'Vmag', 't_eff' : 'Teff', 'sradius' : 'Rs', 'rp' : 'Rp'}).reset_index(drop=True)
     tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001290'), 'cps'] = 'K00246'
+    tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001823'), 'cps'] = 'TIC142381532'
     
     distantgiants_photo = tois_perfect[['cps','toi','ra','dec','Vmag','Rs','Teff']]
     distantgiants_photo = distantgiants_photo[~distantgiants_photo['cps'].isin(tks_drop['Name'])].reset_index(drop = True) # Drop any stars that are in tks_drop

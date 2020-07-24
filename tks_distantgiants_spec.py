@@ -34,7 +34,7 @@ def make_distantgiants_spec():
     jump_df = jump_df.drop(index = jump_df.query("Name == 'T001244'").index.values) # Remove T001244, which has vmag = 11.9
     
     
-    distantgiants_photo = pd.merge(jump_df.drop(columns = 'vmag'), distantgiants_photo[['cps', 'Vmag']], left_on = 'Name', right_on = 'cps', how = 'right').rename(columns = {'Vmag':'vmag'})
+    distantgiants_photo = pd.merge(jump_df.drop(columns = ['vmag']), distantgiants_photo[['cps', 'Vmag']], left_on = 'Name', right_on = 'cps', how = 'right').rename(columns = {'Vmag':'vmag'})
     
     # Creating a new column to tell whether a target has a template on either HIRES or APF
     distantgiants_photo['have_template_hires_j'].replace(np.nan, 0, inplace = True)
