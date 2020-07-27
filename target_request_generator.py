@@ -53,6 +53,7 @@ def obs_request_list_gen(overview_df):
     overview_df = overview_df.sort_values(by = 'ra_deg').reset_index(drop = True)
     
     observing_schedule_df = pd.read_csv('../jump-config/allocations/hires_j/hires_schedule_2020A.csv')[['Date', 'start', 'stop']]
+    print('The 2020A schedule is out of date. This needs to be updated on jump-config/allocations/hires_j')
     
     # The dates in the schedule are given for Hawaii time at midnight that morning. If we start observing Jan 1 at 6 pm Hawaii time, then the JD is Jan 2 at 5 am. 6 pm is early, but we don't need to be too precise because we are going to find the next sunset time anyway.
     observing_dates = Time(observing_schedule_df['Date'].values.tolist(), format='iso').jd + 1 + 5/24
