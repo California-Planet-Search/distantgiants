@@ -166,14 +166,12 @@ def make_overview(plot = False):
         y_length = np.arange(len(plot_df['star_id']))[::-1]
 
         y_increment = (y_length[1]-y_length[0])
-
-        display_window = 210 # How far back in time to display
-
+        display_window = 100
         keck = Observer.at_site('W. M. Keck Observatory') # Site for astroplan to get sunrise/set
         observatory = obs.setupObservatory('keck') # Site for Ian's observing code
 
-        start_date = Time.now().jd-210
-        end_date = Time.now().jd+50
+        start_date = Time.now().jd-2*display_window/3
+        end_date = Time.now().jd+display_window/3
         sidereal_offset = 0.002731 # This is how much earlier a target rises each day (in days)
 
         # Dates to display on the x-axis. Roughly one tick per month by dividing the window by 30
@@ -249,7 +247,7 @@ def make_overview(plot = False):
             ### Observability ###
             observability = True
             # Plotting observability bars takes a while; pick how many stars you want bars for here.
-            if i in [0,1,2]:
+            if observability:
                 
                 star_name = plot_df['star_id'][i]
                 ra_deg = plot_df['ra_deg'][i]
@@ -346,18 +344,35 @@ def make_overview(plot = False):
                                  color = 'red', s = 10, zorder=z_order_list.index('rv_pts'))
 
         cadenced_apf_rvs = ax.scatter(cadenced_apf_dates, cadenced_apf_y - 0.15*(y_length[1]-y_length[0]), marker = 'v', 
-                                 color = 'blue', s = 10, zorder=z_order_list.index('rv_pts'))  
+                                 color = 'blue', s = 10, zorder=z_order_list.index('rv_pts'))
+        
+        
+        ############
+        observing_schedule_df = pd.read_csv('../jump-config/allocations/hires_j/hires_schedule_2020A.csv')[['Date', 'start', 'stop']]
+    
+        # The dates in the schedule are given for Hawaii time at midnight that morning. If we start observing Jan 1 at 6 pm Hawaii time, then the JD is Jan 2 at 5 am. 6 pm is early, but we don't need to be too precise because we are going to find the next sunset time anyway.
+        observing_dates = Time(observing_schedule_df['Date'].values.tolist(), format='iso').jd + 1 + 5/24
+    
+    
+        # Uses the fact that dates are in chronological order, so the min index corresponds to the earliest date
+        index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
+        
+        
+        next_obs = [observing_dates[index_of_next_date+n] for n in range(1)]
+        ############
 
 
         line_today, = ax.plot((Time.now().jd, Time.now().jd), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dashed')
         line_15, = ax.plot((Time.now().jd-15, Time.now().jd-15), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dotted')
         line_25, = ax.plot((Time.now().jd-25, Time.now().jd-25), (y_length[0], y_length[-1]), c = 'black', linestyle = 'dashdot')
+        for i in next_obs:
+            line_next_obs, = ax.plot((next_obs, next_obs), (y_length[0], y_length[-1]), linewidth = 1, c = 'red')
 
         plt.xticks(date_intervals_jd, date_intervals_iso, fontsize = 5)
 
 
         plt.yticks([], [], size = 14)
-        ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15], ['Recon', 'Jitter', 'HIRES', 'APF', 'Today', '25', '15'], loc = (0.24,1.02), prop = {'size':10}, ncol = 4);
+        ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15, line_next_obs], ['Recon', 'Jitter', 'HIRES', 'APF', 'Today', '25', '15', 'Future Nights'], loc = (0.24,1.02), prop = {'size':10}, ncol = 4);
         plt.savefig('csv/overview_plot.jpg', dpi = 500, quality=95)
         plt.show()
         

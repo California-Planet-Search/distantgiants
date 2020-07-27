@@ -22,6 +22,12 @@ warnings.simplefilter('ignore', category=AstropyWarning)
 from cpsutils.obsplanning import Star
 from cpsutils.obsplanning import times
 
+import observing as obs
+from astroplan import Observer, FixedTarget
+import astropy.units as u
+from astropy.coordinates import SkyCoord
+
+
 from overview import make_overview
 from tks_distantgiants import make_distantgiants
 
@@ -38,13 +44,34 @@ def init_overview(iers = False):
     return overview_df
 
 
-def obs_request_list_gen(overview_df, day):
+def obs_request_list_gen(overview_df):
     """
     This function uses the current status of each target in overview_df (jitter, template, recon status as well as 
     time since last RV obs) to create a list of stars that need each type of observation. These are  fed to the generator
     function to be turned into actual script lines.
     """
     overview_df = overview_df.sort_values(by = 'ra_deg').reset_index(drop = True)
+    
+    observing_schedule_df = pd.read_csv('../jump-config/allocations/hires_j/hires_schedule_2020A.csv')[['Date', 'start', 'stop']]
+    
+    # The dates in the schedule are given for Hawaii time at midnight that morning. If we start observing Jan 1 at 6 pm Hawaii time, then the JD is Jan 2 at 5 am. 6 pm is early, but we don't need to be too precise because we are going to find the next sunset time anyway.
+    observing_dates = Time(observing_schedule_df['Date'].values.tolist(), format='iso').jd + 1 + 5/24
+    
+    
+    # Uses the fact that dates are in chronological order, so the min index corresponds to the earliest date
+    # index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
+    
+    next_observing_date = observing_dates[index_of_next_date]
+    # next_observing_date = Time('2020-08-16', format='iso').jd
+    
+    
+    time_gap = next_observing_date - Time.now().jd
+    
+    
+    start = observing_schedule_df['start'][index_of_next_date]
+    stop = observing_schedule_df['stop'][index_of_next_date]
+    #start, stop = 0, 1
+    
     
     request_list = [[], [], [], []]
     obs_list = ['have_recon', 'have_jitter', 'have_template']
@@ -71,10 +98,12 @@ def obs_request_list_gen(overview_df, day):
         Dec_new = sign + str(int(abs(Dec_deg))).zfill(2) +'d'+ str(int((abs(Dec_deg) - int(abs(Dec_deg)))*60)).zfill(2) +'m'+ str(int(np.round((((abs(Dec_deg) - int(abs(Dec_deg)))*60)%1)*60, 0))).zfill(2)+'s'
        
         star_object = Star.star(star_name, RA = RA_new, Dec = Dec_new)
-       
-        observer_times = times.ObserverTimes(utc_date = day)
+        
+        # observer_times = times.ObserverTimes(utc_date = observing_schedule_df['Date'][index_of_next_date], night_kind = [start, stop])
+        observer_times = times.ObserverTimes(utc_date = Time(next_observing_date, format='jd').iso.split(' ')[0], night_kind = [start, stop])
         
         visibility = star_object.visibility(observer_times, verbose = False)
+        
         visible_time = max([i[2] for i in star_object.visibility(observer_times, verbose = False)])
 
         if visible_time < 0.5*u.h:
@@ -87,7 +116,7 @@ def obs_request_list_gen(overview_df, day):
                     # Jitter test stars must pass the extra criterion of being visible for ~3 hours. Skipping 191939 at Howard's suggestion.
                     if (obs_list[j] == 'have_jitter' and visible_time < 3*u.h) or star_name == '191939' :
                         continue
-                    # Templates will only be requested if the star already has more than 3 iodine-in RVs
+                    # Templates will only be requested if the star already has 3 or more iodine-in RVs
                     if (obs_list[j]) == 'have_template_hires_j' and overview_df['tot_iodine_hires'][i] + overview_df['tot_iodine_apf'][i] < 3:
                         continue
                         
@@ -100,7 +129,7 @@ def obs_request_list_gen(overview_df, day):
                     hires_never = True
                 else:
                     hires_never = False
-                    hires_days = float(overview_df['last_obs_hires'][i])
+                    hires_days = float(overview_df['last_obs_hires'][i]) + time_gap # Computes days that will have passed since last obs on the actual day of observation
     
                 if overview_df['last_obs_apf'][i] == 'NEVER':
                     apf_never = True
@@ -253,7 +282,7 @@ def generator(star_requests):
 
 if __name__ == '__main__':
     
-    generator(obs_request_list_gen(init_overview(), Time.now().iso.split(' ')[0]))
+    generator(obs_request_list_gen(init_overview(iers=True)))
     
     
     

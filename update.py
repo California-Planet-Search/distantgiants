@@ -23,4 +23,6 @@ tks_spec.update_distantgiants_spec(tks_spec.make_distantgiants_spec())
 tks.update_distantgiants(tks.make_distantgiants())
 
 ov.update_overview(ov.make_overview(plot = False))
-generator(obs_request_list_gen(init_overview(), Time.now().iso.split(' ')[0]))
+generator(obs_request_list_gen(init_overview()))
+
+
