@@ -1,0 +1,24 @@
+Total requested time = 4456 seconds = 1 hr 14 min 16.0 sec
+
+ 		## Jitter requests ##
+       HIP70705 14 27 41.8 +41 57 13 2000  vmag=9.9  153/ 500  60k B5 1x  in p2 DG ** Jitter test
+        T001691 18 09 37.0 +86 51 37 2000 vmag=10.1  188/ 500  60k C2 1x  in p2 DG ** Jitter test
+		
+		## Template Request ##
+        T001794 13 33 35.4 +49 03 39 2000 vmag=10.3  652/1500 250k B3 1x out p3 DG ** template please add B-stars
+		
+		## RV Requests ##
+          95072 10 59 06.5 +40 59 01 2000  vmag=8.3   34/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+          96735 11 08 55.9 +34 18 11 2000  vmag=9.0   65/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001194 11 11 17.2 +69 57 53 2000 vmag=11.3  553/1200  60k C2 1x  in p2 DG Cadence RV for TKS Distant Giants
+        T001279 12 20 15.1 +56 12 05 2000 vmag=10.7  322/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001451 12 26 05.8 +61 15 32 2000  vmag=9.6  114/ 500  60k B5 1x  in p2 DG Cadence RV for TKS Distant Giants
+        T001794 13 33 35.4 +49 03 39 2000 vmag=10.3  224/ 500  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+       HIP70705 14 27 41.8 +41 57 13 2000  vmag=9.9  153/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+        GJ9522A 15 31 47.0 +47 03 19 2000 vmag=10.5  266/ 600  60k C2 1x  in p3 DG Cadence RV for TKS Distant Giants
+         146757 16 13 57.3 +63 31 60 2000  vmag=9.3   90/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+         156141 17 09 18.9 +71 52 36 2000  vmag=8.9   58/ 500  60k B5 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001691 18 09 37.0 +86 51 37 2000 vmag=10.1  188/ 500  60k C2 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001706 19 00 49.3 +60 14 01 2000 vmag=11.1  449/ 900  60k C2 1x  in p2 DG Cadence RV for TKS Distant Giants
+        T001441 20 21 39.1 +58 08 26 2000 vmag=10.0  173/ 500  60k C2 1x  in p3 DG Cadence RV for TKS Distant Giants
+         347039 20 37 24.9 +22 39 15 2000  vmag=9.4   92/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants

@@ -355,10 +355,11 @@ def make_overview(plot = False):
     
     
         # Uses the fact that dates are in chronological order, so the min index corresponds to the earliest date
-        index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
+        # index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
         
         
-        next_obs = [observing_dates[index_of_next_date+n] for n in range(1)]
+        # next_obs = [observing_dates[index_of_next_date+n] for n in range(1)]
+        next_obs = [Time('2020-08-04', format = 'iso').jd]
         ############
 
 
