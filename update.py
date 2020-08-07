@@ -20,9 +20,9 @@ import sys
 
 tks_photo.update_distantgiants_photo(tks_photo.make_distantgiants_photo())
 tks_spec.update_distantgiants_spec(tks_spec.make_distantgiants_spec())
-tks.update_distantgiants(tks.make_distantgiants())
+# tks.update_distantgiants(tks.make_distantgiants())
 
-ov.update_overview(ov.make_overview(plot = False))
-generator(obs_request_list_gen(init_overview()))
+ov.update_overview(ov.make_overview(plot = False, observability = False))
+generator(obs_request_list_gen(init_overview(iers=False)))
 
 

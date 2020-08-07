@@ -52,26 +52,42 @@ def obs_request_list_gen(overview_df):
     """
     overview_df = overview_df.sort_values(by = 'ra_deg').reset_index(drop = True)
     
-    observing_schedule_df = pd.read_csv('../jump-config/allocations/hires_j/hires_schedule_2020A.csv')[['Date', 'start', 'stop']]
-    print('###The 2020A schedule is out of date. This needs to be updated on jump-config/allocations/hires_j###')
+    observing_schedule_df = pd.read_csv('../jump-config/allocations/hires_j/hires_schedule_2020B.csv')[['Date', 'start', 'stop']].sort_values(by=['Date', 'start'])
+    
+    # The schedule has multiple rows for some nights because the nights were paid for by 2 programs. This chunk combines the duplicate lines and their night fractions. It can NOT account for non-contiguous observing periods. For example, if CPS has the first 1/4 of the night, then we hand off for the second 1/4, then we get it back for the second half, this chunk will think we have the whole night.
+    
+    for i in observing_schedule_df.drop_duplicates(subset='Date')['Date']:
+        if len(observing_schedule_df.query('Date == "{}"'.format(i))) > 1:
+            index_list = observing_schedule_df.query('Date == "{}"'.format(i)).index
+            date = observing_schedule_df['Date'][index_list[0]]
+            start = observing_schedule_df['start'][index_list[0]]
+            stop = observing_schedule_df['stop'][index_list[-1]]
+        
+            observing_schedule_df = observing_schedule_df.drop(index_list).reset_index(drop=True)
+        
+            observing_schedule_df = observing_schedule_df.append(pd.DataFrame({'Date':[date], 'start':[start], 'stop':[stop]})).reset_index(drop=True)
+        
+    observing_schedule_df = observing_schedule_df.sort_values(by='Date').reset_index(drop=True)
+    
     
     # The dates in the schedule are given for Hawaii time at midnight that morning. If we start observing Jan 1 at 6 pm Hawaii time, then the JD is Jan 2 at 5 am. 6 pm is early, but we don't need to be too precise because we are going to find the next sunset time anyway.
     observing_dates = Time(observing_schedule_df['Date'].values.tolist(), format='iso').jd + 1 + 5/24
     
     
     # Uses the fact that dates are in chronological order, so the min index corresponds to the earliest date
-    # index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
     
-    # next_observing_date = observing_dates[index_of_next_date]
-    next_observing_date = Time('2020-08-1', format='iso').jd
+    index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
+    
+    next_observing_date = observing_dates[index_of_next_date]
+    # next_observing_date = Time('2020-08-5', format='iso').jd
     
     
     time_gap = next_observing_date - Time.now().jd
     
     
-    # start = observing_schedule_df['start'][index_of_next_date]
-#     stop = observing_schedule_df['stop'][index_of_next_date]
-    start, stop = 0, .5
+    start = observing_schedule_df['start'][index_of_next_date]
+    stop = observing_schedule_df['stop'][index_of_next_date]
+    # start, stop = 0, 1
     
     
     request_list = [[], [], [], []]
@@ -160,7 +176,7 @@ def generator(star_requests):
     """
     The list of star_requests is expected as a list of lists: [[recon_requests], [jitter_requests], ...],
     where for example, [recon_requests] looks like [(star_name_1, 'recon'), (star_name_2, 'recon'), ...].
-    star_name is the CPS ID of the star as it appears in the all_TOIs spreadsheet, and obs_type is
+    star_name is the CPS ID of the star as it appears in the all_TOIs spreadsheet, and the obs_type is
     an element of the list ['recon', 'jitter', 'template', 'rv'].
     """
     
@@ -224,6 +240,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** Jitter test'
+                v_mag = 0
             
 
             elif obs_type == 'template':
@@ -234,6 +251,7 @@ def generator(star_requests):
                     decker = 'B1'
                 elif v_mag > 10:
                     decker = 'B3'
+                v_mag = 0
                 
                 counts = 250
                 n_shots = '1x'
@@ -282,7 +300,7 @@ def generator(star_requests):
 
 if __name__ == '__main__':
     
-    generator(obs_request_list_gen(init_overview(iers=False)))
+    generator(obs_request_list_gen(init_overview(iers=True)))
     
     
     

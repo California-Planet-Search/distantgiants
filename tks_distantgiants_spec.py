@@ -20,37 +20,37 @@ from git import repo
 def make_distantgiants_spec():
     """
     Creates spec_cuts, the dataframe of all SC2A stars on Jump that pass spectroscopic cuts. Then writes spec_cuts out to
-    the jump-config Github repo. SC2A stars are defined by the output of tks_distgiants_pool.py.
-    Then pushes the changes made to tks_distgiants.txt to the jump-config Github.
+    the jump-config Github repo.
     """
     
-    jump_df = pd.read_csv('csv/candidates.csv')
-    distantgiants_photo = pd.read_csv('csv/distantgiants_photo.csv')
+    # manual_cuts_2 is essentially distantgiants_photo with the added qlp, MES, and close companion cuts
+    manual_cuts_2 = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/manual_cuts_2.csv')
+    print('{} targets from distantgiants_photo pass manual cuts'.format(len(manual_cuts_2)))
     
-    jump_df = jump_df.drop_duplicates(subset='Name')
-    jump_df['vsini'].replace(np.nan, -100, inplace = True)
-    jump_df['logrhk'].replace(np.nan, -100, inplace = True)
-    jump_df['rp'].replace(np.nan, -100, inplace = True)
-    jump_df = jump_df.drop(index = jump_df.query("Name == 'T001244'").index.values) # Remove T001244, which has vmag = 11.9
-    
-    
-    distantgiants_photo = pd.merge(jump_df.drop(columns = ['vmag']), distantgiants_photo[['cps', 'Vmag']], left_on = 'Name', right_on = 'cps', how = 'right').rename(columns = {'Vmag':'vmag'})
-    
-    # Creating a new column to tell whether a target has a template on either HIRES or APF
-    distantgiants_photo['have_template_hires_j'].replace(np.nan, 0, inplace = True)
-    distantgiants_photo['have_template_apf'].replace(np.nan, 0, inplace = True)
-    distantgiants_photo['have_template'] = list(map(lambda x, y: 'NO' if x+y < 1 else 'YES', distantgiants_photo['have_template_hires_j'], distantgiants_photo['have_template_apf']))
 
-    distantgiants_spec = distantgiants_photo.query('vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
-    distantgiants_spec.rename(columns = {'Name':'star_id'}, inplace = 'True')
-    # spec_cuts.at[pd.Index(spec_cuts['star_id']).get_loc('55CNC'), 'star_id'] = '75732'
+    # Spec
+    spec_values = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/TKS_-_Distant_Giants_Spectroscopic_Properties.csv')
     
-    no_no = ['1300', 'T001538', '97658', '110067', '192279', 'T000561', 'T001386', 'T001391', 
-             'T001504', 'T001537', 'T001609', 'T001648', 'T001655', 'T001699', 'T001711']
-    distantgiants_spec = distantgiants_spec.drop(distantgiants_spec.index[distantgiants_spec['star_id'].isin(no_no)])
+    # Take the logrhk and vsini/teff values that correspond to the highest-SNR observation
+    logrhk_df = spec_values.dropna(subset=['logrhk']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep='last')[['star_id', 'logrhk']]
+    vsini_teff_df = spec_values.dropna(subset=['teff', 'vsini']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep = 'last')[['star_id', 'vsini', 'teff']]
     
-    distantgiants_spec.to_csv('csv/distantgiants_spec.csv', index = False)
+    # print('{} targets have APF/HIRES observations, {} have logrhk values, and {} have vsini/teff values'.format(len(spec_values.drop_duplicates(subset='star_id')), len(logrhk_df), len(vsini_teff_df)))
     
+
+    distantgiants_spec = pd.merge(manual_cuts_2.rename(columns = {'Vmag':'vmag'}), logrhk_df, left_on = 'cps', right_on = 'star_id', how='left').drop(columns='star_id').rename(columns={'cps':'star_id'})
+    distantgiants_spec = pd.merge(distantgiants_spec, vsini_teff_df, on = 'star_id', how='left')
+    
+    # distantgiants_spec['vsini'].replace(np.nan, -100, inplace = True)
+ #    distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
+ #    distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)
+    
+    distantgiants_spec = distantgiants_spec.query('teff < 6250 and vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
+    
+    
+    distantgiants_spec.sort_values(by='toi').to_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/distantgiants_spec.csv', index = False)
+   
+  
     return distantgiants_spec
     
     

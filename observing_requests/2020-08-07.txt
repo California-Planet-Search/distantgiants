@@ -1,0 +1,21 @@
+Total requested time = 9682 seconds = 2 hr 41 min 22.0 sec
+ 
+        T001472 00 56 27.3 +48 38 15 2000 vmag=11.3  553/1200  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        WASP156 02 11 07.6 +02 25 05 2000 vmag=11.6  700/1500  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001173 13 10 43.8 +70 46 06 2000 vmag=11.0  433/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001824 13 10 55.5 +61 44 41 2000  vmag=9.7  129/ 500  60k B5 1x  in p3 DG Cadence RV for TKS Distant Giants
+        T001249 13 22 14.8 +66 18 31 2000 vmag=11.1  454/1200  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001794 13 33 35.4 +49 03 40 2000 vmag=10.3  224/ 500  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001174 13 56 52.3 +68 37 05 2000 vmag=11.0  405/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001180 14 18 12.7 +82 11 38 2000 vmag=11.0  425/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        GJ9522A 15 31 46.8 +47 03 24 2000 vmag=10.5  266/ 600  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001269 16 38 47.3 +64 33 31 2000 vmag=11.6  739/1500  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001246 16 44 28.0 +70 25 47 2000 vmag=11.6  749/1500  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001753 16 49 52.8 +61 10 25 2000 vmag=11.8  900/2700  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001244 17 05 07.3 +69 31 10 2000 vmag=11.9  984/2700  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001248 17 16 05.7 +63 06 22 2000 vmag=11.8  879/1800  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001438 18 43 41.8 +74 56 15 2000 vmag=11.0  402/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001706 19 00 49.4 +60 14 02 2000 vmag=11.1  449/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001444 20 21 53.8 +70 56 38 2000 vmag=10.9  394/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001288 20 52 40.0 +65 36 33 2000 vmag=10.4  251/ 600  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001758 23 38 58.3 +75 41 06 2000 vmag=10.8  346/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants

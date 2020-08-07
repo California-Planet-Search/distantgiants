@@ -32,23 +32,25 @@ def make_distantgiants_photo():
     tois_perfect_location = '../tks_target_list_gen/prioritization/info/TOIs_perfect.csv'
     column_changes = {'cps_name':'cps', 'm_s':'smass', 'r_s':'sradius'}
     tois_perfect = pd.read_csv(tois_perfect_location).rename(columns = column_changes)
-    tois_perfect = tois_perfect[['tic','toi','cps','ra','dec','vmag','smass','sradius','t_eff','evol','ruwe','rp']]
+    tois_perfect = tois_perfect[['tic','toi','cps','ra','dec','vmag','smass','sradius','evol','ruwe','rp']]
 
     tks_drop = pd.read_csv('csv/tks_drop.csv')
-
-    for column in ['dec', 'smass', 't_eff', 'ruwe', 'vmag', 'rp']:
+    
+    # Turn these columns from strings to floats
+    for column in ['dec', 'smass', 'ruwe', 'vmag', 'rp']:
         tois_perfect['{}'.format(column)] = tois_perfect['{}'.format(column)].astype(float)
         
    
 
     ## Photometric Cuts
     tois_perfect = tois_perfect.drop_duplicates(subset = 'cps')
-    tois_perfect = tois_perfect.query('dec > 0 and t_eff < 6250 and evol=="MS" and ruwe < 1.3 and vmag <= 11.5 and rp < 10 and smass > 0.5 and smass < 1.5')
-    tois_perfect = tois_perfect.rename(columns = {'vmag' : 'Vmag', 't_eff' : 'Teff', 'sradius' : 'Rs', 'rp' : 'Rp'}).reset_index(drop=True)
+    tois_perfect = tois_perfect.query('dec > 0 and evol=="MS" and ruwe < 1.3 and vmag <= 12 and rp < 10 and smass > 0.5 and smass < 1.5')
+    tois_perfect = tois_perfect.rename(columns = {'vmag' : 'Vmag', 'sradius' : 'Rs', 'rp' : 'Rp'}).reset_index(drop=True)
     tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001290'), 'cps'] = 'K00246'
-    tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001823'), 'cps'] = 'TIC142381532'
+    tois_perfect = tois_perfect.drop(tois_perfect[tois_perfect['cps'] == 'T001443'].index)
+    # tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001823'), 'cps'] = 'TIC142381532'
     
-    distantgiants_photo = tois_perfect[['cps','toi','ra','dec','Vmag','Rs','Teff']]
+    distantgiants_photo = tois_perfect[['cps','toi','tic','ra','dec','Vmag','Rs', 'smass', 'Rp', 'ruwe', 'evol']]
     distantgiants_photo = distantgiants_photo[~distantgiants_photo['cps'].isin(tks_drop['Name'])].reset_index(drop = True) # Drop any stars that are in tks_drop
     
     
