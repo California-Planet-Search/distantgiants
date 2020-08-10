@@ -1,109 +1,128 @@
 toi,cps,qlp_only?,MES,SNR,
-1799.01,96735,FALSE,7.1,8.4,"low snr, poor fit"
-1250.01,T001250,FALSE,7.3,8.5,"the transit is low SNR, but more troubling is the fact that the transit center is 20"" off the target stellar position. TOI1250 has no transiting object!"
-1263.01,347039,FALSE,7.3,7.9,"low snr, poor fit"
-1237.01,K00244,FALSE,7.4,7.5,"low SNR, we know this is a good transit because it was detected by Kepler, but by itself, it's not compelling"
-1776.01,95072,FALSE,7.4,7.8,"low SNR, will get poor fit, don't observe"
-1727.01,T001727,FALSE,7.6,7.9,"low SNR, will get poor fit, don't observe"
-1687.01,T001687,FALSE,7.7,8.6,"low snr, HUGE spot modulation. lots of artifacts in the detrended light curve due to rotation period, don't observe"
-1839.01,T001839,FALSE,7.7,9.3,transit looks borderline
-1435.01,T001435,FALSE,7.9,7.4,
-1835.01,110067,FALSE,7.9,10.8,"ratty fit, don't observe"
-1446.01,T001446,FALSE,8,8,
-1741.01,T001741,FALSE,8.4,9.5,
-1777.01,87620,FALSE,8.5,8.5,"low snr. two transits also is concerning, don't observe"
-1761.01,T001761,FALSE,8.6,9.2,"a borderline case, fit is low snr, but there is also very little out of transit variability, which boosts confidence, I would still not observe"
-1473.01,6061,FALSE,8.7,10.7,"transit looks legit, snr is a little crummy which will result in radius uncertainties.
-"
-1290.01,K00246,FALSE,8.8,9.6,"transit looks legit, would have some hesitation about observing if it wasn't a Kepler target"
-1747.01,T001747,FALSE,8.8,9.9,"low snr, light curve fitting will be a challenge"
-1686.01,T001686,FALSE,8.9,9.7,"boarderline case, fit will be fairly poor"
-561.01,T000561,FALSE,9.1,10,"Fit looks crummy, but that's because of overlapping transits"
-1739.01,T001739,FALSE,9.1,10.6,fit looks fine
-1805.01,T001805,FALSE,10.2,10.6,"transit looks OK, but not much deeper than other noise present in the phase-folded lightcurve"
-1462.01,158259,FALSE,10.3,10.7,Fit looks fine
-1681.01,T001681,FALSE,10.3,12.6,"Fit looks significant, but a bit vshaped"
-1798.01,T001798,FALSE,10.5,11.6,"fit looks fine, ingress/egress issues due to USP status, the second candidate is boarderline, but the two support eachother"
-1643.01,234571,FALSE,10.6,15.5,"fit looks fine, an interesting case where the SNR is much higher than the MES, perhaps the transits near the edge of the data did not get included in the MES periodogram, but did get included in the SNR fit"
-1801.01,HIP57099,FALSE,10.6,10.7,Transit looks fine
-1803.01,T001803,FALSE,10.7,12.9,Both sets of transits look fine
-1778.01,77946,FALSE,10.8,11.8,fit looks fine
-1734.01,T001734,FALSE,10.9,11.2,boarderline fit
-1735.01,T001735,FALSE,11,13.1,fit looks fine
-1441.01,T001441,FALSE,11.2,12.6,"boarderline trasnit, not much deeper than the out of transit flux"
-554.01,25463,FALSE,11.3,12.7,fit looks good
-1768.01,T001768,FALSE,11.5,13.2,fit looks good
-1346.01,T001346,FALSE,11.7,15.3,both sets of transits look fine
-1774.01,85426,FALSE,11.9,13.1,"transit looks good. only two transits so some concern of different planets, but both have consistent depth."
-1472.01,T001472,FALSE,12,13.4,Transit does not look good. There is some weird red-noise component in the light curve
-1772.01,T001772,FALSE,12,13.2,"transit looks good. only two transits so some concern of different planets, but both have consistent depth."
-1706.01,T001706,FALSE,12.2,13.5,transit looks good
-1716.01,237566,FALSE,12.3,13.3,transit looks fine 
-1807.01,HIP65469,FALSE,12.5,15.5,transit looks fine ~1% spot modulation might challenge PRV measurements
-1260.01,T001260E,FALSE,12.5,13.7,transit looks fine
-1664.01,238876,FALSE,12.6,14.3,transit looks fine
-1758.01,T001758,FALSE,12.7,15.3,transit looks fine
-1411.01,GJ9522A,FALSE,13,15.2,transit looks fine
-1279.01,T001279,FALSE,13.1,14.3,transit looks good
-1669.01,T001669,FALSE,13.1,13.9,transit looks good
-1444.01,T001444,FALSE,13.2,15,transit looks good
-1824.01,T001824,FALSE,13.2,14.2,transit looks good
-1753.01,T001753,FALSE,13.3,14.4,transit looks great
-1744.01,T001744,FALSE,13.4,14.2,"candidate 1 looks great, candidate 2 does not"
-1722.01,T001722,FALSE,13.5,15.6,transit looks great
-1723.01,T001723,FALSE,13.5,14,"transits look fine, some concern because there are only too, but they have consistent depths"
-1794.01,T001794,FALSE,14.3,15.2,solid detection
-1416.01,HIP70705,FALSE,14.6,15.6,"transit looks fine, USP, so ingress/egress issues"
-1797.01,93963,FALSE,14.6,16.1,transit looks fine
-1347.01,T001347,FALSE,14.7,16.1,transit looks fine
-1434.01,102121,FALSE,14.7,14.7,transit looks good
-1249.01,T001249,FALSE,14.9,15.9,transit looks fine
-1726.01,63433,FALSE,15,16.2,"transit looks good, but there is ~1% spot modulation that may limit absolute RV precision. I wonder if this star also passes the activity cut"
-1438.01,T001438,FALSE,15.4,17,
-1235.01,T001235,FALSE,15.6,19,
-1469.01,219134,FALSE,15.8,18.3,
-1174.01,T001174,FALSE,16.2,16.8,
-1451.01,T001451,FALSE,16.2,17.7,
-1471.01,12572,FALSE,17,19.4,
-1437.01,154840,FALSE,17.4,17.8,
-1430.01,235088,FALSE,18,21.5,
-1410.01,T001410,FALSE,18.1,22.8,
-1443.01,T001443,FALSE,18.2,19.6,
-1422.01,T001422,FALSE,18.9,19.7,
-1269.01,T001269,FALSE,18.9,21.4,
-1244.01,T001244,FALSE,19.3,20.7,
-509.01,63935,FALSE,19.8,21.4,
-1246.01,T001246,FALSE,20,21.8,
-1751.01,146757,FALSE,20.4,21.1,
-1301.01,T001301,FALSE,20.7,22.5,
-1258.01,T001258,FALSE,21.4,25.1,
-1742.01,156141,FALSE,21.4,22.9,
-1453.01,T001453,FALSE,21.6,23.8,
-1280.01,T001280E,FALSE,22.1,23.1,
-1415.01,HIP71409,FALSE,22.7,24.4,
-1691.01,T001691,FALSE,23,26.4,
-1759.01,T001759,FALSE,23.3,23.7,
-1486.01,T001486,FALSE,24.7,23.3,
-1247.01,135694,FALSE,25.5,26.7,
-1255.01,HIP97166,FALSE,26,29,
-1272.01,T001272,FALSE,27.2,31.8,
-1184.01,T001184,FALSE,27.4,32.3,
-1136.01,T001136,FALSE,27.7,34.7,
-1180.01,T001180,FALSE,28.8,29.7,
-1775.01,T001775,FALSE,29.1,28.3,
-1611.01,207897,FALSE,29.3,34.7,
-1773.01,75732,FALSE,31,52.8,
-1836.01,148193,FALSE,33.6,43.7,
 465.01,WASP156,FALSE,34.8,46.6,
-1694.01,T001694,FALSE,43.6,61.8,
-1710.01,T001710,FALSE,55.3,53,
-1288.01,T001288,FALSE,57.2,88.4,
-1339.01,191939,FALSE,58.3,66.1,
-1823.01,TIC142381532,FALSE,81.3,79.4,
-1248.01,T001248,FALSE,105.1,133.4,
+509.01,63935,FALSE,19.8,21.4,
+554.01,25463,FALSE,11.3,12.7,fit looks good
+561.01,T000561,FALSE,9.1,10,"Fit looks crummy, but that's because of overlapping transits"
+1136.01,T001136,FALSE,27.7,34.7,
 1144.01,HTR155-001,FALSE,114.4,122.8,
 1173.01,T001173,FALSE,126.1,135.6,
+1174.01,T001174,FALSE,16.2,16.8,
+1180.01,T001180,FALSE,28.8,29.7,
+1184.01,T001184,FALSE,27.4,32.3,
 1194.01,T001194,FALSE,130,138.7,
+1235.01,T001235,FALSE,15.6,19,
+1237.01,K00244,FALSE,7.4,7.5,"low SNR, we know this is a good transit because it was detected by Kepler, but by itself, it's not compelling"
+1244.01,T001244,FALSE,19.3,20.7,
+1246.01,T001246,FALSE,20,21.8,
+1247.01,135694,FALSE,25.5,26.7,
+1248.01,T001248,FALSE,105.1,133.4,
+1249.01,T001249,FALSE,14.9,15.9,transit looks fine
+1250.01,T001250,FALSE,7.3,8.5,"the transit is low SNR, but more troubling is the fact that the transit center is 20"" off the target stellar position. TOI1250 has no transiting object!"
+1255.01,HIP97166,FALSE,26,29,
+1258.01,T001258,FALSE,21.4,25.1,
+1260.01,T001260E,FALSE,12.5,13.7,transit looks fine
+1261.01,T001261,FALSE,8.9,8.8,
+1263.01,347039,FALSE,7.3,7.9,"low snr, poor fit"
+1264.01,T001264,FALSE,100,132.1,
+1269.01,T001269,FALSE,18.9,21.4,
+1272.01,T001272,FALSE,27.2,31.8,
+1279.01,T001279,FALSE,13.1,14.3,transit looks good
+1280.01,T001280E,FALSE,22.1,23.1,
+1280.01,T001280,FALSE,22.1,23.1,
+1288.01,T001288,FALSE,57.2,88.4,
+1290.01,K00246,FALSE,8.8,9.6,"transit looks legit, would have some hesitation about observing if it wasn't a Kepler target"
+1301.01,T001301,FALSE,20.7,22.5,
+1339.01,191939,FALSE,58.3,66.1,
+1346.01,T001346,FALSE,11.7,15.3,both sets of transits look fine
+1347.01,T001347,FALSE,14.7,16.1,transit looks fine
+1410.01,T001410,FALSE,18.1,22.8,
+1411.01,GJ9522A,FALSE,13,15.2,transit looks fine
+1415.01,HIP71409,FALSE,22.7,24.4,
+1416.01,HIP70705,FALSE,14.6,15.6,"transit looks fine, USP, so ingress/egress issues"
+1422.01,T001422,FALSE,18.9,19.7,
+1430.01,235088,FALSE,18,21.5,
+1432.01,T001432,FALSE,10.5,12.1,
+1434.01,102121,FALSE,14.7,14.7,transit looks good
+1435.01,T001435,FALSE,7.9,7.4,
+1437.01,154840,FALSE,17.4,17.8,
+1438.01,T001438,FALSE,15.4,17,
+1441.01,T001441,FALSE,11.2,12.6,"boarderline trasnit, not much deeper than the out of transit flux"
+1443.01,T001443,FALSE,18.2,19.6,
+1444.01,T001444,FALSE,13.2,15,transit looks good
+1446.01,T001446,FALSE,8,8,
+1451.01,T001451,FALSE,16.2,17.7,
+1453.01,T001453,FALSE,21.6,23.8,
+1462.01,158259,FALSE,10.3,10.7,Fit looks fine
+1469.01,219134,FALSE,15.8,18.3,
+1471.01,12572,FALSE,17,19.4,
+1472.01,T001472,FALSE,12,13.4,Transit does not look good. There is some weird red-noise component in the light curve
+1473.01,6061,FALSE,8.7,10.7,"transit looks legit, snr is a little crummy which will result in radius uncertainties.
+"
+1486.01,T001486,FALSE,24.7,23.3,
+1610.01,T001610,FALSE,10.6,11.7,
+1611.01,207897,FALSE,29.3,34.7,
+1643.01,234571,FALSE,10.6,15.5,"fit looks fine, an interesting case where the SNR is much higher than the MES, perhaps the transits near the edge of the data did not get included in the MES periodogram, but did get included in the SNR fit"
+1664.01,238876,FALSE,12.6,14.3,transit looks fine
+1669.01,T001669,FALSE,13.1,13.9,transit looks good
+1681.01,T001681,FALSE,10.3,12.6,"Fit looks significant, but a bit vshaped"
+1686.01,T001686,FALSE,8.9,9.7,"boarderline case, fit will be fairly poor"
+1687.01,T001687,FALSE,7.7,8.6,"low snr, HUGE spot modulation. lots of artifacts in the detrended light curve due to rotation period, don't observe"
+1691.01,T001691,FALSE,23,26.4,
+1694.01,T001694,FALSE,43.6,61.8,
+1706.01,T001706,FALSE,12.2,13.5,transit looks good
+1710.01,T001710,FALSE,55.3,53,
+1716.01,237566,FALSE,12.3,13.3,transit looks fine 
+1722.01,T001722,FALSE,13.5,15.6,transit looks great
+1723.01,T001723,FALSE,13.5,14,"transits look fine, some concern because there are only too, but they have consistent depths"
+1726.01,63433,FALSE,15,16.2,"transit looks good, but there is ~1% spot modulation that may limit absolute RV precision. I wonder if this star also passes the activity cut"
+1727.01,T001727,FALSE,7.6,7.9,"low SNR, will get poor fit, don't observe"
+1734.01,T001734,FALSE,10.9,11.2,boarderline fit
+1735.01,T001735,FALSE,11,13.1,fit looks fine
+1736.01,T001736,FALSE,11.9,16.7,
+1739.01,T001739,FALSE,9.1,10.6,fit looks fine
+1741.01,T001741,FALSE,8.4,9.5,
+1742.01,156141,FALSE,21.4,22.9,
+1744.01,T001744,FALSE,13.4,14.2,"candidate 1 looks great, candidate 2 does not"
+1747.01,T001747,FALSE,8.8,9.9,"low snr, light curve fitting will be a challenge"
+1751.01,146757,FALSE,20.4,21.1,
+1753.01,T001753,FALSE,13.3,14.4,transit looks great
+1758.01,T001758,FALSE,12.7,15.3,transit looks fine
+1759.01,T001759,FALSE,23.3,23.7,
+1761.01,T001761,FALSE,8.6,9.2,"a borderline case, fit is low snr, but there is also very little out of transit variability, which boosts confidence, I would still not observe"
+1768.01,T001768,FALSE,11.5,13.2,fit looks good
+1772.01,T001772,FALSE,12,13.2,"transit looks good. only two transits so some concern of different planets, but both have consistent depth."
+1773.01,75732,FALSE,31,52.8,
+1774.01,85426,FALSE,11.9,13.1,"transit looks good. only two transits so some concern of different planets, but both have consistent depth."
+1775.01,T001775,FALSE,29.1,28.3,
+1776.01,95072,FALSE,7.4,7.8,"low SNR, will get poor fit, don't observe"
+1777.01,87620,FALSE,8.5,8.5,"low snr. two transits also is concerning, don't observe"
+1778.01,77946,FALSE,10.8,11.8,fit looks fine
+1794.01,T001794,FALSE,14.3,15.2,solid detection
+1797.01,93963,FALSE,14.6,16.1,transit looks fine
+1798.01,T001798,FALSE,10.5,11.6,"fit looks fine, ingress/egress issues due to USP status, the second candidate is boarderline, but the two support eachother"
+1799.01,96735,FALSE,7.1,8.4,"low snr, poor fit"
+1801.01,HIP57099,FALSE,10.6,10.7,Transit looks fine
+1803.01,T001803,FALSE,10.7,12.9,Both sets of transits look fine
+1805.01,T001805,FALSE,10.2,10.6,"transit looks OK, but not much deeper than other noise present in the phase-folded lightcurve"
+1807.01,HIP65469,FALSE,12.5,15.5,transit looks fine ~1% spot modulation might challenge PRV measurements
+1823.01,TIC142381532,FALSE,81.3,79.4,
+1824.01,T001824,FALSE,13.2,14.2,transit looks good
+1835.01,110067,FALSE,7.9,10.8,"ratty fit, don't observe"
+1836.01,148193,FALSE,33.6,43.7,
+1839.01,T001839,FALSE,7.7,9.3,transit looks borderline
+1860.01,134319,FALSE,14.1,17,
+2016.01,T002016,FALSE,9.5,10.3,
+2018.01,HIP74981,FALSE,14.2,14.4,
+2023.01,T002023,FALSE,7.3,7.4,
+2024.01,149026,FALSE,152.4,141.4,
+2076.01,T002076,FALSE,14.9,17.4,
+2077.01,T002077,FALSE,8.9,9.5,
+2088.01,T002088,FALSE,13.9,14.9,
+2092.01,T002092,FALSE,9.3,9.9,
+2100.01,T002100,FALSE,8.4,9.2,
+2101.01,T002101,FALSE,10.3,11.7,
+2128.01,155060,FALSE,7.8,8.5,
+1293.01,T001293,TRUE,,17.6,
 1304.01,192279,TRUE,,24.5,
 1386.01,T001386,TRUE,,28.2,
 1391.01,T001391,TRUE,,11.9,
@@ -122,29 +141,9 @@ toi,cps,qlp_only?,MES,SNR,
 1699.01,T001699,TRUE,,10.4,
 1708.01,T001708,TRUE,,47.2,
 1711.01,T001711,TRUE,,66.3,
-1821.01,97658,TRUE,,11,
-1293.01,T001293,TRUE,,17.6,
-,,,,,
-2128.01,155060,FALSE,7.8,8.5,
-2110.01,T002110,TRUE,,9.1,
-2101.01,T002101,FALSE,10.3,11.7,
-2100.01,T002100,FALSE,8.4,9.2,
-2092.01,T002092,FALSE,9.3,9.9,
-2088.01,T002088,FALSE,13.9,14.9,
-2077.01,T002077,FALSE,8.9,9.5,
-2076.01,T002076,FALSE,14.9,17.4,
-2041.01,T002041,TRUE,,21.7,
-2039.01,T002039,TRUE,,16.5,
-2026.01,T002026,TRUE,,10.7,
-2024.01,149026,FALSE,152.4,141.4,
-2023.01,T002023,FALSE,7.3,7.4,
-2018.01,HIP74981,FALSE,14.2,14.4,
-2016.01,T002016,FALSE,9.5,10.3,
-1860.01,134319,FALSE,14.1,17,
 1818.01,T001818,TRUE,,34.1,
-1736.01,T001736,FALSE,11.9,16.7,
-1610.01,T001610,FALSE,10.6,11.7,
-1432.01,T001432,FALSE,10.5,12.1,
-1280.01,T001280,FALSE,22.1,23.1,
-1264.01,T001264,FALSE,100,132.1,
-1261.01,T001261,FALSE,8.9,8.8,
+1821.01,97658,TRUE,,11,
+2026.01,T002026,TRUE,,10.7,
+2039.01,T002039,TRUE,,16.5,
+2041.01,T002041,TRUE,,21.7,
+2110.01,T002110,TRUE,,9.1,

@@ -41,6 +41,7 @@ def make_distantgiants_spec():
     distantgiants_spec = pd.merge(manual_cuts_2.rename(columns = {'Vmag':'vmag'}), logrhk_df, left_on = 'cps', right_on = 'star_id', how='left').drop(columns='star_id').rename(columns={'cps':'star_id'})
     distantgiants_spec = pd.merge(distantgiants_spec, vsini_teff_df, on = 'star_id', how='left')
     
+    # I have removed these for now to have a robust, 'for sure' list. If we want to add in targets that don't have spec properties later, I can use it
     # distantgiants_spec['vsini'].replace(np.nan, -100, inplace = True)
  #    distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
  #    distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)

@@ -1,0 +1,26 @@
+Total requested time = 13058 seconds = 3 hr 37 min 38.0 sec
+ 
+        T001472 00 56 27.3 +48 38 15 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        WASP156 02 11 07.6 +02 25 05 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001269 16 38 47.3 +64 33 31 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001246 16 44 28.0 +70 25 47 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T002088 17 25 30.0 +75 52 56 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001691 18 09 37.5 +86 51 35 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001438 18 43 41.8 +74 56 15 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001444 20 21 53.8 +70 56 38 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001288 20 52 40.0 +65 36 33 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001759 21 47 24.8 +62 45 14 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001410 22 19 32.0 +42 33 37 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001422 23 36 57.9 +39 38 22 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001758 23 38 58.3 +75 41 06 2000    vmag=0    0/ 500  60k C2 1x  in p2 DG ** Jitter test
+        T001472 00 56 27.3 +48 38 15 2000 vmag=11.3 1612/3600 250k B3 1x out p3 DG ** template please add B-stars
+        WASP156 02 11 07.6 +02 25 05 2000 vmag=11.6 2042/5400 250k B3 1x out p3 DG ** template please add B-stars
+        T001173 13 10 43.8 +70 46 06 2000 vmag=11.0 1264/2700 250k B3 1x out p3 DG ** template please add B-stars
+        T001249 13 22 14.8 +66 18 31 2000 vmag=11.1 1325/2700 250k B3 1x out p3 DG ** template please add B-stars
+        T001180 14 18 12.7 +82 11 38 2000 vmag=11.0 1240/2700 250k B3 1x out p3 DG ** template please add B-stars
+        T002088 17 25 30.0 +75 52 56 2000 vmag=11.6 2196/5400 250k B3 1x out p3 DG ** template please add B-stars
+        T001438 18 43 41.8 +74 56 15 2000 vmag=11.0 1173/2700 250k B3 1x out p3 DG ** template please add B-stars
+        T001758 23 38 58.3 +75 41 06 2000 vmag=10.8 1009/2700 250k B3 1x out p3 DG ** template please add B-stars
+        T001173 13 10 43.8 +70 46 06 2000 vmag=11.0  433/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001249 13 22 14.8 +66 18 31 2000 vmag=11.1  454/1200  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants
+        T001443 19 49 36.1 +76 08 21 2000 vmag=10.7  310/ 900  60k C2 1x  in p1 DG Cadence RV for TKS Distant Giants

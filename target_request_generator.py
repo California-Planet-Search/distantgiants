@@ -251,7 +251,7 @@ def generator(star_requests):
                     decker = 'B1'
                 elif v_mag > 10:
                     decker = 'B3'
-                v_mag = 0
+                # v_mag = 0
                 
                 counts = 250
                 n_shots = '1x'

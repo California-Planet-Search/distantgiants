@@ -45,16 +45,16 @@ def make_overview(plot = True, observability = False):
     jump_df['have_template'] = list(map(lambda x, y: 'NO' if x+y < 1 else 'YES', jump_df['have_template_hires_j'], jump_df['have_template_apf']))
     
     
-    distantgiants_spec = pd.read_csv('csv/distantgiants_spec.csv')
-    distantgiants_spec = pd.merge(distantgiants_spec, jump_df, left_on = 'star_id', right_on = 'Name')
+    distantgiants = pd.read_csv('csv/distantgiants.csv')
+    distantgiants = pd.merge(distantgiants, jump_df, left_on = 'star_id', right_on = 'Name')
     
     sql_df = pd.read_csv('csv/Distant_Giants_Observing_Requests.csv')
 
-    sql_df = pd.merge(distantgiants_spec[['star_id', 'vmag', 'ra', 'dec']], sql_df, on = 'star_id', how = 'inner')
+    sql_df = pd.merge(distantgiants[['star_id', 'vmag', 'ra', 'dec']], sql_df, on = 'star_id', how = 'inner')
 
 
     full_star_list = pd.merge(sql_df.drop_duplicates(subset = 'star_id'), \
-                              distantgiants_spec.drop_duplicates(subset = 'star_id'), \
+                              distantgiants.drop_duplicates(subset = 'star_id'), \
                               on = 'star_id', how = 'outer')['star_id'].to_frame()
     
     # Stars that need recon
@@ -102,7 +102,7 @@ def make_overview(plot = True, observability = False):
     # Creating overview_df to show general information
     overview_df = recon_df[['star_id', 'have_recon']]
     overview_df = pd.merge(overview_df, jitter_df[['star_id', 'have_jitter']], how = 'outer', on = 'star_id')
-    overview_df = pd.merge(overview_df, distantgiants_spec[['star_id', 'have_template']], how = 'outer', on = 'star_id') # Stars that need templates 
+    overview_df = pd.merge(overview_df, distantgiants[['star_id', 'have_template']], how = 'outer', on = 'star_id') # Stars that need templates 
     overview_df = pd.merge(overview_df, 
                            pd.DataFrame(sql_df_yesiod.groupby(by=['star_id', 'instrument']).size()).reset_index().\
                            rename(columns = {0: 'tot_iodine_hires'}).query("instrument == 'hires_j'").drop(columns = {'instrument'}),
@@ -142,18 +142,20 @@ def make_overview(plot = True, observability = False):
     # Add a new column 'cooked?' to indicate any target with both a 3+ year baseline and 40+ observations. 
     cooked = []
     for i in range(len(overview_df)):
-        if type(overview_df['baseline_hires'][i]) == str:
+        if isinstance(overview_df['baseline_hires'][i], str):
             baseline_hires = 0
-        elif type(overview_df['baseline_hires'][i]) == float:
+        elif isinstance(overview_df['baseline_hires'][i], float):
             baseline_hires = float(overview_df['baseline_hires'][i])
         else:
+            print('Error: type is neither str nor float')
             print(type(overview_df['baseline_hires'][i]))
         
-        if type(overview_df['baseline_apf'][i]) == str:
+        if isinstance(overview_df['baseline_apf'][i], str):
             baseline_apf = 0
-        elif type(overview_df['baseline_apf'][i]) == float:
+        elif isinstance(overview_df['baseline_apf'][i], float):
             baseline_apf = float(overview_df['baseline_apf'][i])
         else:
+            print('Error: type is neither str nor float')
             print(type(overview_df['baseline_apf'][i]))
         
         if (baseline_hires > 1095 or baseline_apf >= 1095) and\

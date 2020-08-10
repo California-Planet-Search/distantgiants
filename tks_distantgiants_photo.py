@@ -47,7 +47,8 @@ def make_distantgiants_photo():
     tois_perfect = tois_perfect.query('dec > 0 and evol=="MS" and ruwe < 1.3 and vmag <= 12 and rp < 10 and smass > 0.5 and smass < 1.5')
     tois_perfect = tois_perfect.rename(columns = {'vmag' : 'Vmag', 'sradius' : 'Rs', 'rp' : 'Rp'}).reset_index(drop=True)
     tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001290'), 'cps'] = 'K00246'
-    tois_perfect = tois_perfect.drop(tois_perfect[tois_perfect['cps'] == 'T001443'].index)
+    # T001443 has a close companion listed on Jump; Erik says no reason to drop
+    # tois_perfect = tois_perfect.drop(tois_perfect[tois_perfect['cps'] == 'T001443'].index)
     # tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001823'), 'cps'] = 'TIC142381532'
     
     distantgiants_photo = tois_perfect[['cps','toi','tic','ra','dec','Vmag','Rs', 'smass', 'Rp', 'ruwe', 'evol']]
