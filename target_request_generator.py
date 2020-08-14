@@ -162,6 +162,9 @@ def obs_request_list_gen(overview_df):
                 elif (hires_never or hires_days > 15)\
                 and (apf_never or apf_days > 15):
                     prio = 3
+                # elif (hires_never or hires_days > 0)\
+ #                and (apf_never or apf_days > 0):
+ #                    prio = 4
                 else:
                     prio = 0
               
@@ -169,7 +172,9 @@ def obs_request_list_gen(overview_df):
                 request_list[j].append((overview_df['star_id'][i], 'rv', prio, vmag, RA_deg, Dec_deg))
         
     return request_list
-    
+
+
+# print(obs_request_list_gen(init_overview(iers=False)))
     
     
 def generator(star_requests):
@@ -240,7 +245,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** Jitter test'
-                v_mag = 0
+                # v_mag = 0
             
 
             elif obs_type == 'template':
@@ -300,7 +305,10 @@ def generator(star_requests):
 
 if __name__ == '__main__':
     
-    generator(obs_request_list_gen(init_overview(iers=True)))
+    request_list = obs_request_list_gen(init_overview(iers=False))
+    # request_list[0].append(('T001775', 'recon', 3, 11.648, 150.1151, 39.4578))
+    
+    generator(request_list)
     
     
     

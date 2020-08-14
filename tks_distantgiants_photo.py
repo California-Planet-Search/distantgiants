@@ -32,7 +32,7 @@ def make_distantgiants_photo():
     tois_perfect_location = '../tks_target_list_gen/prioritization/info/TOIs_perfect.csv'
     column_changes = {'cps_name':'cps', 'm_s':'smass', 'r_s':'sradius'}
     tois_perfect = pd.read_csv(tois_perfect_location).rename(columns = column_changes)
-    tois_perfect = tois_perfect[['tic','toi','cps','ra','dec','vmag','smass','sradius','evol','ruwe','rp']]
+    tois_perfect = tois_perfect[['tic','toi','cps','ra','dec','vmag','smass','sradius','evol','ruwe','rp', 'period']]
 
     tks_drop = pd.read_csv('csv/tks_drop.csv')
     
@@ -51,7 +51,7 @@ def make_distantgiants_photo():
     # tois_perfect = tois_perfect.drop(tois_perfect[tois_perfect['cps'] == 'T001443'].index)
     # tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001823'), 'cps'] = 'TIC142381532'
     
-    distantgiants_photo = tois_perfect[['cps','toi','tic','ra','dec','Vmag','Rs', 'smass', 'Rp', 'ruwe', 'evol']]
+    distantgiants_photo = tois_perfect[['cps','toi','tic','ra','dec','Vmag','Rs', 'smass', 'Rp', 'ruwe', 'evol', 'period']]
     distantgiants_photo = distantgiants_photo[~distantgiants_photo['cps'].isin(tks_drop['Name'])].reset_index(drop = True) # Drop any stars that are in tks_drop
     
     

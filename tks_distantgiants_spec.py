@@ -23,28 +23,31 @@ def make_distantgiants_spec():
     the jump-config Github repo.
     """
     
+    distantgiants_photo = pd.read_csv('csv/distantgiants_photo.csv')
+    
     # manual_cuts_2 is essentially distantgiants_photo with the added qlp, MES, and close companion cuts
     manual_cuts_2 = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/manual_cuts_2.csv')
+    
+    distantgiants_photo = pd.merge(distantgiants_photo, manual_cuts_2['cps'], on = 'cps')
     print('{} targets from distantgiants_photo pass manual cuts'.format(len(manual_cuts_2)))
     
-
     # Spec
     spec_values = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/TKS_-_Distant_Giants_Spectroscopic_Properties.csv')
     
     # Take the logrhk and vsini/teff values that correspond to the highest-SNR observation
-    logrhk_df = spec_values.dropna(subset=['logrhk']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep='last')[['star_id', 'logrhk']]
+    logrhk_sval_df = spec_values.dropna(subset=['logrhk', 'sval']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep='last')[['star_id', 'logrhk', 'sval']]
     vsini_teff_df = spec_values.dropna(subset=['teff', 'vsini']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep = 'last')[['star_id', 'vsini', 'teff']]
     
     # print('{} targets have APF/HIRES observations, {} have logrhk values, and {} have vsini/teff values'.format(len(spec_values.drop_duplicates(subset='star_id')), len(logrhk_df), len(vsini_teff_df)))
     
 
-    distantgiants_spec = pd.merge(manual_cuts_2.rename(columns = {'Vmag':'vmag'}), logrhk_df, left_on = 'cps', right_on = 'star_id', how='left').drop(columns='star_id').rename(columns={'cps':'star_id'})
+    distantgiants_spec = pd.merge(distantgiants_photo.rename(columns = {'Vmag':'vmag'}), logrhk_sval_df, left_on = 'cps', right_on = 'star_id', how='left').drop(columns='star_id').rename(columns={'cps':'star_id'})
     distantgiants_spec = pd.merge(distantgiants_spec, vsini_teff_df, on = 'star_id', how='left')
     
     # I have removed these for now to have a robust, 'for sure' list. If we want to add in targets that don't have spec properties later, I can use it
     # distantgiants_spec['vsini'].replace(np.nan, -100, inplace = True)
- #    distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
- #    distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)
+#     distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
+#     distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)
     
     distantgiants_spec = distantgiants_spec.query('teff < 6250 and vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
     
