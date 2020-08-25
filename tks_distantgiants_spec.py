@@ -45,10 +45,10 @@ def make_distantgiants_spec():
     distantgiants_spec = pd.merge(distantgiants_spec, vsini_teff_df, on = 'star_id', how='left')
     
     # I have removed these for now to have a robust, 'for sure' list. If we want to add in targets that don't have spec properties later, I can use it
-    # distantgiants_spec['vsini'].replace(np.nan, -100, inplace = True)
-#     distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
-#     distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)
-    
+    distantgiants_spec['vsini'].replace(np.nan, -100, inplace = True)
+    distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
+    distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)
+
     distantgiants_spec = distantgiants_spec.query('teff < 6250 and vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
     
     

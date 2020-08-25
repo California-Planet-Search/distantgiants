@@ -18,11 +18,10 @@ def make_distantgiants():
     
     distantgiants_spec = pd.read_csv('csv/distantgiants_spec.csv')
     # observing_priorities = pd.read_csv('../tks_target_list_gen/data/observing_priorities.csv')
-    observing_priorities = pd.read_csv('/Users/judahvz/observing_priorities.csv')
+    observing_priorities = pd.read_csv('csv/observing_priorities.csv')
     
-    print('len of dg_spec:', len(distantgiants_spec))
     overlap = [observing_priorities['toi'][i] for i in range(len(observing_priorities)) if 'SC2A' in observing_priorities['programs'][i]]
-    print(len(overlap))
+    print('There are {} targets assigned to SC2A.'.format(len(overlap)))
     # print('number of SC2A in Ashley list:', len(overlap))
     
     # The following are columns that I want displayed in the distantgiants paper

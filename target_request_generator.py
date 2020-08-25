@@ -17,16 +17,10 @@ from astropy.time import Time
 
 import warnings
 from astropy.utils.exceptions import AstropyWarning
-warnings.simplefilter('ignore', category=AstropyWarning)
+# warnings.simplefilter('ignore', category=AstropyWarning)
 
 from cpsutils.obsplanning import Star
 from cpsutils.obsplanning import times
-
-import observing as obs
-from astroplan import Observer, FixedTarget
-import astropy.units as u
-from astropy.coordinates import SkyCoord
-
 
 from overview import make_overview
 from tks_distantgiants import make_distantgiants
@@ -74,7 +68,7 @@ def obs_request_list_gen(overview_df):
     observing_dates = Time(observing_schedule_df['Date'].values.tolist(), format='iso').jd + 1 + 5/24
     
     
-    # Uses the fact that dates are in chronological order, so the min index corresponds to the earliest date
+    # Uses the fact that the dates are in chronological order, so the min index corresponds to the earliest date
     
     index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
     
@@ -245,7 +239,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** Jitter test'
-                # v_mag = 0
+                v_mag = 0
             
 
             elif obs_type == 'template':
@@ -256,7 +250,7 @@ def generator(star_requests):
                     decker = 'B1'
                 elif v_mag > 10:
                     decker = 'B3'
-                # v_mag = 0
+                v_mag = 0
                 
                 counts = 250
                 n_shots = '1x'
@@ -306,7 +300,8 @@ def generator(star_requests):
 if __name__ == '__main__':
     
     request_list = obs_request_list_gen(init_overview(iers=False))
-    # request_list[0].append(('T001775', 'recon', 3, 11.648, 150.1151, 39.4578))
+    request_list[0].append(('T001775', 'recon', 3, 11.648, 150.1151, 39.4578))
+    # request_list[0].append(('T001260E', 'recon', 3, 9.92, 157.1459, 65.8546))
     
     generator(request_list)
     

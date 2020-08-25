@@ -1,7 +1,5 @@
-Total requested time = 38265 seconds = 10 hr 37 min 45.0 sec
+Total requested time = 38158 seconds = 10 hr 35 min 58.0 sec
  
-        T001775 10 00 27.6 +39 27 28 2000 vmag=11.6   89/ 500  10k B3 1x out p3 DG Recon for TKS Distant Giants
-       T001260E 10 28 35.0 +65 51 17 2000  vmag=9.9   18/ 500  10k B1 1x out p3 DG Recon for TKS Distant Giants
         T001472 00 56 27.3 +48 38 15 2000 vmag=11.3  553/1200  60k C2 1x  in p2 DG ** Jitter test
         WASP156 02 11 07.6 +02 25 05 2000 vmag=11.6  700/1500  60k C2 1x  in p2 DG ** Jitter test
         T001669 03 03 48.7 +83 35 15 2000 vmag=10.2  204/ 500  60k C2 1x  in p2 DG ** Jitter test

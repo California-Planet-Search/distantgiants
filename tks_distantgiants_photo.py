@@ -49,6 +49,8 @@ def make_distantgiants_photo():
     tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001290'), 'cps'] = 'K00246'
     # T001443 has a close companion listed on Jump; Erik says no reason to drop
     # tois_perfect = tois_perfect.drop(tois_perfect[tois_perfect['cps'] == 'T001443'].index)
+    # T001260E is an SB (we think) and won't be good for RVs
+    tois_perfect = tois_perfect.drop(tois_perfect[tois_perfect['cps'] == 'T001260E'].index)
     # tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001823'), 'cps'] = 'TIC142381532'
     
     distantgiants_photo = tois_perfect[['cps','toi','tic','ra','dec','Vmag','Rs', 'smass', 'Rp', 'ruwe', 'evol', 'period']]
