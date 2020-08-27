@@ -1,11 +1,9 @@
 """
 Judah Van Zandt
 Python 3
-
 This module is used to compile general information about the state of each target in the SC2A program.
-
 Written: June 1, 2020
-Last modified: July 7, 2020
+Last modified: August 27, 2020
 """
 
 
@@ -259,6 +257,7 @@ def make_overview(plot = True, observability = False):
             
             ### Observability ###
             # Plotting observability bars takes a while; pick how many stars you want bars for here.
+            # Also I've tried plotting observability according to cpsutils as in target_request_generator. That way agrees better with Jump (no surprise there) but it takes ~twice as long to run. We're stuck with this for now I think.
             if observability == True:
                 
                 star_name = plot_df['star_id'][i]
@@ -416,10 +415,4 @@ def update_overview(overview_df):
 
 if __name__ == "__main__":
     
-   update_overview(make_overview(plot = True, observability = False))
-
-
-
-
-
-
+   update_overview(make_overview(plot = True, observability = True))

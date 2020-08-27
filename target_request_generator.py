@@ -5,7 +5,7 @@ Python 3
 This module generates a list of observing requests based on the current status of each star in the SC2A program.
 
 Written: June 1, 2020
-Last modified: July 8, 2020
+Last modified: August 27, 2020
 """
 
 import pandas as pd
