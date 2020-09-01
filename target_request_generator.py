@@ -87,7 +87,7 @@ def obs_request_list_gen(overview_df):
     request_list = [[], [], [], []]
     obs_list = ['have_recon', 'have_jitter', 'have_template']
     obs_type = ['recon', 'jitter', 'template', 'rv']
-    obs_prio = [2, 2, 3]
+    obs_prio = [2, 3, 3]
     
     for i in range(len(overview_df)):
         
@@ -239,7 +239,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** Jitter test'
-                v_mag = 0
+                # v_mag = 0
             
 
             elif obs_type == 'template':
@@ -250,7 +250,7 @@ def generator(star_requests):
                     decker = 'B1'
                 elif v_mag > 10:
                     decker = 'B3'
-                v_mag = 0
+                # v_mag = 0
                 
                 counts = 250
                 n_shots = '1x'
@@ -300,7 +300,7 @@ def generator(star_requests):
 if __name__ == '__main__':
     
     request_list = obs_request_list_gen(init_overview(iers=False))
-    request_list[0].append(('T001775', 'recon', 3, 11.648, 150.1151, 39.4578))
+    # request_list[0].append(('T001775', 'recon', 3, 11.648, 150.1151, 39.4578))
     # request_list[0].append(('T001260E', 'recon', 3, 9.92, 157.1459, 65.8546))
     
     generator(request_list)
