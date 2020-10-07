@@ -79,7 +79,7 @@ def obs_type(dataframe, hires_template_counts = 6e4, apf_template_counts = 9e7, 
 def plot(dataframe):
                        
     df = dataframe.sort_values(by='ra')
-    fig = px.scatter(df, x='bjd', y='star_id', color='instrument')
+    fig = px.scatter(df, x='bjd', y='star_id', color='instrument', symbol='obs_type')
     fig['layout']['yaxis']['autorange'] = "reversed"
     fig.show()
 
