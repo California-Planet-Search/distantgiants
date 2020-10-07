@@ -1,0 +1,8 @@
+Total requested time ~ 42 min
+ 
+
+        T001669 03 03 48.7 +83 35 15 2000 vmag=10.2  204/ 500  60k C2 1x  in p3 DG ** Jitter test
+        T001758 23 38 58.3 +75 41 06 2000 vmag=10.8  346/ 900  60k C2 1x  in p3 DG ** Jitter test
+ 
+        T001173 13 10 43.8 +70 46 06 2000 vmag=11.0  433/ 900  60k C2 1x  in p2 DG Cadence RV for TKS Distant Giants
+        T001249 13 22 14.8 +66 18 31 2000 vmag=11.1  454/1200  60k C2 1x  in p2 DG Cadence RV for TKS Distant Giants

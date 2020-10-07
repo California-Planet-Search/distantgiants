@@ -15,7 +15,7 @@ def update_manual_cuts_2(verbose = False):
 
     distantgiants_photo = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/distantgiants_photo.csv')
 
-    # These are all photo targets, but will MES and qlp information included. This df is made MANUALLY from distantgiants_photo, so it will not update automatically if new TOIs are added to tois_perfect.csv
+    # These are all photo targets, but with MES and qlp information included. This df is made MANUALLY from distantgiants_photo, so it will not update automatically if new TOIs are added to tois_perfect.csv
     manual_cuts_1 = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/manual_cuts_1.csv')
     manual_cuts_1 = manual_cuts_1.query("`qlp_only?`== False and MES >= 12.0")
 

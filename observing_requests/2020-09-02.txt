@@ -1,0 +1,5 @@
+Total requested time = 2594 seconds ~ 43 min
+ 
+
+        T001753 16 49 52.8 +61 10 25 2000 vmag=11.8 1312/2700 125k B3 1x out p3 DG ** template please add B-stars
+        T001248 17 16 05.7 +63 06 22 2000 vmag=11.8 1282/2700 125k B3 1x out p3 DG ** template please add B-stars

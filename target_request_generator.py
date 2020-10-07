@@ -72,8 +72,8 @@ def obs_request_list_gen(overview_df):
     
     index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
     
-    next_observing_date = observing_dates[index_of_next_date]
-    # next_observing_date = Time('2020-08-5', format='iso').jd
+    # next_observing_date = observing_dates[index_of_next_date]
+    next_observing_date = Time('2020-10-01', format='iso').jd
     
     
     time_gap = next_observing_date - Time.now().jd
@@ -82,7 +82,6 @@ def obs_request_list_gen(overview_df):
     start = observing_schedule_df['start'][index_of_next_date]
     stop = observing_schedule_df['stop'][index_of_next_date]
     # start, stop = 0, 1
-    
     
     request_list = [[], [], [], []]
     obs_list = ['have_recon', 'have_jitter', 'have_template']
@@ -98,7 +97,6 @@ def obs_request_list_gen(overview_df):
         vmag = overview_df['vmag'][i]
         RA_deg = overview_df['ra_deg'][i]
         Dec_deg = overview_df['dec_deg'][i]
-        
         
         if Dec_deg >= 0:
                 sign = '+'
@@ -131,7 +129,6 @@ def obs_request_list_gen(overview_df):
                         continue
                         
                     request_list[j].append((overview_df['star_id'][i], obs_type[j], obs_prio[j], vmag, RA_deg, Dec_deg))
-               
            
             # Creating requests for cadence RVs  
             elif obs_type[j] == 'rv':
@@ -146,7 +143,6 @@ def obs_request_list_gen(overview_df):
                 else:
                     apf_never = False
                     apf_days = float(overview_df['last_obs_apf'][i])
-    
                 if (hires_never or hires_days > 25)\
                 and (apf_never or apf_days > 25):
                     prio = 1
@@ -239,7 +235,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** Jitter test'
-                # v_mag = 0
+                v_mag = 0
             
 
             elif obs_type == 'template':
@@ -250,9 +246,9 @@ def generator(star_requests):
                     decker = 'B1'
                 elif v_mag > 10:
                     decker = 'B3'
-                # v_mag = 0
+                v_mag = 0
                 
-                counts = 250
+                counts = 125
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** template please add B-stars'
@@ -266,6 +262,7 @@ def generator(star_requests):
                     decker = 'B5'
                 elif v_mag > 10:
                     decker = 'C2'
+                # v_mag = 0
                     
                 counts = 60
                 n_shots = '1x'

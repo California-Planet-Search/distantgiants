@@ -25,7 +25,7 @@ def make_distantgiants_spec():
     
     distantgiants_photo = pd.read_csv('csv/distantgiants_photo.csv')
     
-    # manual_cuts_2 is essentially distantgiants_photo with the added qlp, MES, and close companion cuts
+    # manual_cuts_1 is the manually-compiled set of targets that pass MES/qlp criteria. manual_cuts_2 is the result of enforcing another cut on close companions using Gaia DR2 data
     manual_cuts_2 = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/manual_cuts_2.csv')
     
     distantgiants_photo = pd.merge(distantgiants_photo, manual_cuts_2['cps'], on = 'cps')
@@ -72,7 +72,7 @@ def update_distantgiants_spec(distantgiants_spec):
     commit_message = 'Updated distantgiants_spec.txt'
     
     my_repo = repo.Repo(jump_config_path) # Path to jump_config repo
-    my_repo.git.add(update=True) # Adds updates to existing files to index, rather than index.add, which I think works for                              adding *new* files
+    my_repo.git.add(update=True) # Adds updates to existing files to index, rather than index.add, which I think works for adding *new* files
     my_repo.index.commit(commit_message) # Add commit message to the index (staging area between working dir and repo)
     origin = my_repo.remote(name='origin') # Specify where to push changes
     origin.pull()

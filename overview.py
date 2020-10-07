@@ -29,28 +29,28 @@ def make_overview(plot = True, observability = False):
     With a lot of intermediate steps, this function generates overview_df and an overview plot. They both contain important
     information about each target in SC2A.
     """
-    # Need jump_df for template information
-    jump_df = pd.read_csv('csv/candidates.csv')
-    
-    jump_df = jump_df.drop_duplicates(subset='Name')
-    jump_df['rp'].replace(np.nan, -100, inplace = True)
-    jump_df = jump_df[['Name', 'rp', 'have_template_hires_j', 'have_template_apf', 'mass', 'radius', 'svalue', 'ruwe', 'per']]
-    # jump_df = jump_df.drop(index = jump_df.query("Name == 'T001244'").index.values) # Remove T001244, which has vmag = 11.9
-
-    # Creating a new column to tell whether a target has a template on either HIRES or APF
-    jump_df['have_template_hires_j'].replace(np.nan, 0, inplace = True)
-    jump_df['have_template_apf'].replace(np.nan, 0, inplace = True)
-    jump_df['have_template'] = list(map(lambda x, y: 'NO' if x+y < 1 else 'YES', jump_df['have_template_hires_j'], jump_df['have_template_apf']))
-    
     
     distantgiants = pd.read_csv('csv/distantgiants.csv')
-    distantgiants = pd.merge(distantgiants, jump_df, left_on = 'star_id', right_on = 'Name')
-    
+ 
     sql_df = pd.read_csv('csv/Distant_Giants_Observing_Requests.csv')
 
     sql_df = pd.merge(distantgiants[['star_id', 'vmag', 'ra', 'dec']], sql_df, on = 'star_id', how = 'inner')
-
-
+    
+    # We want to find templates by excluding 10k recon spectra (on HIRES). 
+    # 5.4E8 counts on APF is the same as 60k on HIRES, so a recon spectrum on APF would have ~9E7 counts
+    template_apf = sql_df.query('instrument == "apf" and counts > 9e7 and iodine_in == "f"').sort_values(by=['star_id', 'iodine_in', 'counts']).drop_duplicates(subset=['star_id', 'instrument'], keep = 'last')[['star_id', 'bjd', 'counts', 'iodine_in']].rename(columns = {'bjd':'apf_template_bjd'}).replace(np.nan, 0)
+    # template_apf['apf_template'] = [1 for i in range(len(template_apf))]
+    template_hires = sql_df.query('instrument == "hires_j" and counts > 6e4 and iodine_in == "f"').sort_values(by=['star_id', 'iodine_in', 'counts']).drop_duplicates(subset=['star_id', 'instrument'], keep = 'last')[['star_id', 'bjd', 'counts', 'iodine_in']].rename(columns = {'bjd':'hires_template_bjd'}).replace(np.nan, 0)
+    # template_hires['hires_template'] = [1 for i in range(len(template_hires))]
+    
+    template_df = pd.merge(template_apf[['star_id', 'apf_template_bjd']], template_hires[['star_id', 'hires_template_bjd']], on = 'star_id', how = 'outer')
+    
+    distantgiants = pd.merge(distantgiants, template_df, on = 'star_id', how = 'left')
+    distantgiants[['apf_template_bjd', 'hires_template_bjd']] = distantgiants[['apf_template_bjd', 'hires_template_bjd']]
+    
+    distantgiants['have_template'] = list(map(lambda x, y: 'NO' if np.isnan(x) and np.isnan(y) else 'YES', distantgiants['apf_template_bjd'], distantgiants['hires_template_bjd']))
+    
+    
     full_star_list = pd.merge(sql_df.drop_duplicates(subset = 'star_id'), \
                               distantgiants.drop_duplicates(subset = 'star_id'), \
                               on = 'star_id', how = 'outer')['star_id'].to_frame()
@@ -71,7 +71,7 @@ def make_overview(plot = True, observability = False):
     # Stars that need jitter tests
 
     grouped_list = sql_df_yesiod.groupby(by=['star_id', 'day', 'instrument'])
-    has_jitter = grouped_list.size().to_frame().reset_index().rename(columns = {0:'count'}).query('count >= 3').sort_values(['star_id', 'day']).drop_duplicates(subset = 'star_id', keep = 'first')
+    has_jitter = grouped_list.size().to_frame().reset_index().rename(columns = {0:'count'}).query('count >= 3 and instrument == "hires_j"').sort_values(['star_id', 'day']).drop_duplicates(subset = 'star_id', keep = 'first')
     jitter_df = pd.merge(has_jitter, full_star_list, on = 'star_id', how = 'outer')
     jitter_df['have_jitter'] = list(map(lambda x: 0 if pd.isna(x) else 1, jitter_df['count']))
     jitter_df['bjd_jitter'] = list(map(lambda x: x if pd.isna(x) else Time(x, format = 'iso', out_subfmt = 'date').jd, jitter_df['day']))
@@ -166,14 +166,19 @@ def make_overview(plot = True, observability = False):
     # I've commented this line out to keep from cutting on membership in distantgiants
     overview_df = pd.merge(overview_df, sql_df.drop_duplicates(subset = 'star_id')[['star_id', 'vmag', 'ra', 'dec']], on = 'star_id')
     overview_df = overview_df.rename(columns = {'ra':'ra_deg', 'dec':'dec_deg'})
-
+    
+    # print(template_df)
+#     dfdfd
     if plot == True:
         # Creating plot_df with all of the information to create an image with an overview for each target
         plot_df = pd.merge(overview_df, recon_df.drop(columns = 'have_recon'), on = 'star_id')
-        plot_df = pd.merge(plot_df, jitter_df.drop(columns = 'have_jitter'), on = 'star_id')[['star_id', 'instrument_recon', 'bjd_recon', 'bjd_jitter', 'have_template','cooked?', 'ra_deg', 'dec_deg']]
-
+        plot_df = pd.merge(plot_df, template_df, on = 'star_id', how = 'left')
+        plot_df = pd.merge(plot_df, jitter_df.drop(columns = 'have_jitter'), on = 'star_id')[['star_id', 'instrument_recon', 'bjd_recon', 'bjd_jitter', 'apf_template_bjd', 'hires_template_bjd', 'have_template','cooked?', 'ra_deg', 'dec_deg']]
+        
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
         # Initializing variables for the plot
-
+    
         y_length = np.arange(len(plot_df['star_id']))[::-1]
 
         y_increment = (y_length[1]-y_length[0])
@@ -192,8 +197,8 @@ def make_overview(plot = True, observability = False):
         recon_color = 'green'
         template_color = 'black'
         jitter_color = 'pink'
-        rv_color_hires = 'red'
-        rv_color_apf = 'blue'
+        color_hires = 'red'
+        color_apf = 'blue'
 
         ######################
         # Making the plot
@@ -201,7 +206,7 @@ def make_overview(plot = True, observability = False):
 
         fig, ax = plt.subplots(figsize=(10, 8), dpi= 100, facecolor='w', edgecolor='k')
 
-        z_order_list = z_order_list = ['observability', 'h_line_plot', 'rv_pts', 'recon_pts', 'jitter_pts', 'recon_arrows', 'jitter_arrows']
+        z_order_list = z_order_list = ['observability', 'h_line_plot', 'rv_pts', 'recon_pts', 'template_pts', 'jitter_pts', 'recon_arrows', 'jitter_arrows']
 
         plt.hlines(y_length, start_date, end_date, colors = ['black', 'gray'], linewidths = 0.2, zorder = z_order_list.index('h_line_plot'))
         plt.grid(b = True, which = 'major', axis = 'x', linewidth = .2)
@@ -213,7 +218,8 @@ def make_overview(plot = True, observability = False):
         # Plotting the dates of each star's recon and jitter
         recon_pts = ax.scatter(plot_df['bjd_recon'], y_length, color = recon_color, s=6, zorder = z_order_list.index('recon_pts'))
         jitter_pts = ax.scatter(plot_df['bjd_jitter'], y_length, color = jitter_color, s=6, zorder = z_order_list.index('jitter_pts'))
-
+        apf_template_pts = ax.scatter(plot_df['apf_template_bjd'], y_length, color = 'black', marker = '*', s=30, zorder = z_order_list.index('template_pts'))
+        hires_template_pts = ax.scatter(plot_df['hires_template_bjd'], y_length, color = 'black', marker = '*', s=30, zorder = z_order_list.index('template_pts'))
 
         ax.text(end_date+10, y_length[0]+1, 'Template?', size = 8)
         ax.text(start_date-15, y_length[0]+1, 'Jitter?', size = 8)
@@ -322,7 +328,7 @@ def make_overview(plot = True, observability = False):
                 # star_marker_list gives the 'landmark' dates for a target, where it transitions from being observable to unobservable, or vice versa
                 star_marker_list.append((end_date, False))
                #######
-                print(star_marker_list)
+                # print(star_marker_list)
                 # Break down star_marker_list into dates and boolean values for plotting
                 date_list, truth_list = np.transpose(np.vstack(star_marker_list))[0], np.transpose(np.vstack(star_marker_list))[1]
 
@@ -352,10 +358,10 @@ def make_overview(plot = True, observability = False):
 
 
         cadenced_hires_rvs = ax.scatter(cadenced_hires_dates, cadenced_hires_y - 0.15*(y_length[1]-y_length[0]), marker = 'v', 
-                                 color = 'red', s = 10, zorder=z_order_list.index('rv_pts'))
+                                 color = color_hires, s = 10, zorder=z_order_list.index('rv_pts'))
 
         cadenced_apf_rvs = ax.scatter(cadenced_apf_dates, cadenced_apf_y - 0.15*(y_length[1]-y_length[0]), marker = 'v', 
-                                 color = 'blue', s = 10, zorder=z_order_list.index('rv_pts'))
+                                 color = color_apf, s = 10, zorder=z_order_list.index('rv_pts'))
         
         
         ############
@@ -399,7 +405,7 @@ def make_overview(plot = True, observability = False):
 
 
         plt.yticks([], [], size = 14)
-        ax.legend([recon_pts, jitter_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15, line_next_obs], ['Recon', 'Jitter', 'HIRES', 'APF', 'Today', '25', '15', 'Future Nights'], loc = (0.24,1.02), prop = {'size':10}, ncol = 4);
+        ax.legend([recon_pts, jitter_pts, hires_template_pts, apf_template_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15, line_next_obs], ['Recon', 'Jitter', 'HIRES Template', 'APF Template', 'HIRES', 'APF', 'Today', '25', '15', 'Future Nights'], loc = (0.10,1.02), prop = {'size':10}, ncol = 4);
         fig.tight_layout()
         plt.savefig('csv/overview_plot.jpg', dpi = 500, quality=95)
         plt.show()
