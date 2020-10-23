@@ -72,8 +72,8 @@ def obs_request_list_gen(overview_df):
     
     index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
     
-    # next_observing_date = observing_dates[index_of_next_date]
-    next_observing_date = Time('2020-10-01', format='iso').jd
+    next_observing_date = observing_dates[index_of_next_date]
+    # next_observing_date = Time('2020-10-30', format='iso').jd
     
     
     time_gap = next_observing_date - Time.now().jd
@@ -113,7 +113,8 @@ def obs_request_list_gen(overview_df):
         visibility = star_object.visibility(observer_times, verbose = False)
         
         visible_time = max([i[2] for i in star_object.visibility(observer_times, verbose = False)])
-
+        if star_name == 'T001691':
+            print(visible_time)
         if visible_time < 0.5*u.h:
             continue
 
@@ -148,10 +149,10 @@ def obs_request_list_gen(overview_df):
                     prio = 1
                 elif (hires_never or hires_days > 20)\
                 and (apf_never or apf_days > 20):
-                    prio = 2
+                    prio = 0
                 elif (hires_never or hires_days > 15)\
                 and (apf_never or apf_days > 15):
-                    prio = 3
+                    prio = 0
                 # elif (hires_never or hires_days > 0)\
  #                and (apf_never or apf_days > 0):
  #                    prio = 4
@@ -235,7 +236,7 @@ def generator(star_requests):
                 n_shots = '1x'
                 initials = 'DG'
                 string = '** Jitter test'
-                v_mag = 0
+                # v_mag = 0
             
 
             elif obs_type == 'template':
@@ -246,7 +247,7 @@ def generator(star_requests):
                     decker = 'B1'
                 elif v_mag > 10:
                     decker = 'B3'
-                v_mag = 0
+                # v_mag = 0
                 
                 counts = 125
                 n_shots = '1x'
@@ -297,8 +298,6 @@ def generator(star_requests):
 if __name__ == '__main__':
     
     request_list = obs_request_list_gen(init_overview(iers=False))
-    # request_list[0].append(('T001775', 'recon', 3, 11.648, 150.1151, 39.4578))
-    # request_list[0].append(('T001260E', 'recon', 3, 9.92, 157.1459, 65.8546))
     
     generator(request_list)
     

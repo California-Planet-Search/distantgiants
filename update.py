@@ -16,13 +16,13 @@ import tks_distantgiants as tks
 import overview as ov
 from target_request_generator import generator, obs_request_list_gen, init_overview
 from astropy.time import Time
-import sys
+
 
 tks_photo.update_distantgiants_photo(tks_photo.make_distantgiants_photo())
 tks_spec.update_distantgiants_spec(tks_spec.make_distantgiants_spec())
 tks.update_distantgiants(tks.make_distantgiants())
 
-ov.update_overview(ov.make_overview(plot = False, observability = False))
-generator(obs_request_list_gen(init_overview(iers=False)))
+ov.update_overview(ov.make_overview(plot = True, observability = False))
+generator(obs_request_list_gen(init_overview(iers=True)))
 
 

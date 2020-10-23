@@ -21,6 +21,9 @@ import observing as obs
 
 import distantgiants
 
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+
 
 
 
@@ -35,6 +38,7 @@ def make_overview(plot = True, observability = False):
     sql_df = pd.read_csv('csv/Distant_Giants_Observing_Requests.csv')
 
     sql_df = pd.merge(distantgiants[['star_id', 'vmag', 'ra', 'dec']], sql_df, on = 'star_id', how = 'inner')
+    
     
     # We want to find templates by excluding 10k recon spectra (on HIRES). 
     # 5.4E8 counts on APF is the same as 60k on HIRES, so a recon spectrum on APF would have ~9E7 counts
@@ -67,6 +71,7 @@ def make_overview(plot = True, observability = False):
                         rename(columns = {'instrument':'instrument_recon'})
 
     recon_df['have_recon'] = list(map(lambda x: 0 if pd.isna(x) else 1, recon_df['bjd_recon']))
+    
          
     # Stars that need jitter tests
 
@@ -167,16 +172,12 @@ def make_overview(plot = True, observability = False):
     overview_df = pd.merge(overview_df, sql_df.drop_duplicates(subset = 'star_id')[['star_id', 'vmag', 'ra', 'dec']], on = 'star_id')
     overview_df = overview_df.rename(columns = {'ra':'ra_deg', 'dec':'dec_deg'})
     
-    # print(template_df)
-#     dfdfd
     if plot == True:
         # Creating plot_df with all of the information to create an image with an overview for each target
         plot_df = pd.merge(overview_df, recon_df.drop(columns = 'have_recon'), on = 'star_id')
         plot_df = pd.merge(plot_df, template_df, on = 'star_id', how = 'left')
         plot_df = pd.merge(plot_df, jitter_df.drop(columns = 'have_jitter'), on = 'star_id')[['star_id', 'instrument_recon', 'bjd_recon', 'bjd_jitter', 'apf_template_bjd', 'hires_template_bjd', 'have_template','cooked?', 'ra_deg', 'dec_deg']]
         
-        pd.set_option('display.max_rows', None)
-        pd.set_option('display.max_columns', None)
         # Initializing variables for the plot
     
         y_length = np.arange(len(plot_df['star_id']))[::-1]

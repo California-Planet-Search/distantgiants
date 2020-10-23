@@ -25,7 +25,7 @@ def make_distantgiants_spec():
     
     distantgiants_photo = pd.read_csv('csv/distantgiants_photo.csv')
     
-    # manual_cuts_1 is the manually-compiled set of targets that pass MES/qlp criteria. manual_cuts_2 is the result of enforcing another cut on close companions using Gaia DR2 data
+    # manual_cuts_1 is the manually-compiled set of targets that pass MES>12 and NOT qlp-only. manual_cuts_2 is the result of enforcing another cut on close companions using Gaia DR2 data
     manual_cuts_2 = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/manual_cuts_2.csv')
     
     distantgiants_photo = pd.merge(distantgiants_photo, manual_cuts_2['cps'], on = 'cps')
