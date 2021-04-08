@@ -16,6 +16,9 @@ warnings.filterwarnings('ignore')
 import gspread
 from git import repo
 
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+
 
 def make_distantgiants_photo():
     """
@@ -26,8 +29,11 @@ def make_distantgiants_photo():
     
     Pushes the changes made to tks_distgiants_photo.txt to the jump-config Github.
     """
+    
+    # Uncomment these to get original
     tois_perfect_location = '../tks_target_list_gen/prioritization/info/TOIs_perfect.csv'
     column_changes = {'cps_name':'cps', 'm_s':'smass', 'r_s':'sradius'}
+
     tois_perfect = pd.read_csv(tois_perfect_location).rename(columns = column_changes)
     tois_perfect = tois_perfect[['tic','toi','cps','ra','dec','vmag','smass','sradius','evol','ruwe','rp', 'period']]
 
@@ -36,14 +42,20 @@ def make_distantgiants_photo():
     # Turn these columns from strings to floats
     for column in ['dec', 'smass', 'ruwe', 'vmag', 'rp']:
         tois_perfect['{}'.format(column)] = tois_perfect['{}'.format(column)].astype(float)
-        
-   
-
     ## Photometric Cuts
     tois_perfect = tois_perfect.drop_duplicates(subset = 'cps')
-    tois_perfect = tois_perfect.query('dec > 0 and evol=="MS" and ruwe < 1.3 and vmag <= 12 and rp < 10 and smass > 0.5 and smass < 1.5')
+
+    ############
+    # change ruwe condition back to ruwe < 1.3
+    tois_perfect = tois_perfect.query('dec > 0 and evol=="MS" and not ruwe >= 1.3 and vmag <= 12 and rp < 10 and smass > 0.5 and smass < 1.5')
+
+    ############
     tois_perfect = tois_perfect.rename(columns = {'vmag' : 'Vmag', 'sradius' : 'Rs', 'rp' : 'Rp'}).reset_index(drop=True)
+    ############
+
     tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001290'), 'cps'] = 'K00246'
+    # tois_perfect.at[pd.Index(tois_perfect['cps']).get_loc('T001290'), 'cps_name'] = 'K00246'
+    ############
     # T001443 has a close companion listed on Jump; Erik says no reason to drop
     # tois_perfect = tois_perfect.drop(tois_perfect[tois_perfect['cps'] == 'T001443'].index)
     # T001260E is an SB (we think) and won't be good for RVs
@@ -53,9 +65,7 @@ def make_distantgiants_photo():
     distantgiants_photo = tois_perfect[['cps','toi','tic','ra','dec','Vmag','Rs', 'smass', 'Rp', 'ruwe', 'evol', 'period']]
     distantgiants_photo = distantgiants_photo[~distantgiants_photo['cps'].isin(tks_drop['Name'])].reset_index(drop = True) # Drop any stars that are in tks_drop
     
-    
-    distantgiants_photo.to_csv('csv/distantgiants_photo.csv', index = False)
-    
+    # distantgiants_photo.to_csv('csv/distantgiants_photo.csv', index = False)
     return distantgiants_photo
 
 def update_distantgiants_photo(distantgiants_photo):
@@ -81,8 +91,8 @@ def update_distantgiants_photo(distantgiants_photo):
 
 
 if __name__ == "__main__":
-    
-  update_distantgiants_photo(make_distantgiants_photo())
+    # make_distantgiants_photo()
+    update_distantgiants_photo(make_distantgiants_photo())
 
 
 

@@ -1,0 +1,8 @@
+Total requested time ~ 1 hr.		
+		
+        T001272 13 16 47.2 +49 51 40 2000 vmag=11.8  841/1800  60k C2 1x  in p1 DG RV for Distant Giants
+         135694 15 11 28.9 +71 50 28 2000  vmag=9.1   71/ 500  60k B5 1x  in p1 DG RV for Distant Giants
+        T001246 16 44 28.0 +70 25 47 2000 vmag=11.6  749/1500  60k C2 1x  in p1 DG RV for Distant Giants
+        T001753 16 49 52.8 +61 10 25 2000 vmag=11.8  900/2700  60k C2 1x  in p1 DG RV for Distant Giants
+        T001244 17 05 07.3 +69 31 10 2000 vmag=11.9  984/2700  60k C2 1x  in p1 DG RV for Distant Giants
+        T001691 18 09 37.5 +86 51 35 2000 vmag=10.1  188/ 500  60k C2 1x  in p1 DG RV for Distant Giants

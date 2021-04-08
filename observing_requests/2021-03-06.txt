@@ -1,0 +1,5 @@
+Total requested time = 2616 seconds = 0 hr 43 min 36.0 sec
+ 
+        T001244 17 05 07.3 +69 31 10 2000 vmag=11.9  984/2700  60k C2 1x  in p1 DG RV for Distant Giants
+        T001248 17 16 05.7 +63 06 22 2000 vmag=11.8  879/1800  60k C2 1x  in p1 DG RV for Distant Giants
+        T002088 17 25 30.0 +75 52 56 2000 vmag=11.6  753/1800  60k C2 1x  in p1 DG RV for Distant Giants

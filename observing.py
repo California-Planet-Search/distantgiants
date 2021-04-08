@@ -270,8 +270,8 @@ def isObservable(dates, obs, target, minElevation=30, twilight=12, oversamp=1):
         sunalts = ndimage.zoom(sunalts.reshape(dateshape), oversamp)
         dateshape = alts.shape
         
-    vis = ((-sunalts >= (twilight*np.pi/180.)) * keck_limits(alts, azs)).reshape(dateshape)
-    # vis = ((-sunalts >= (twilight*np.pi/180.)) * (alts >= (minElevation*np.pi/180.))).reshape(dateshape)
+    # vis = ((-sunalts >= (twilight*np.pi/180.)) * keck_limits(alts, azs)).reshape(dateshape)
+    vis = ((-sunalts >= (twilight*np.pi/180.)) * (alts >= (minElevation*np.pi/180.))).reshape(dateshape)
     #dates = dates.reshape(dateshape)
     #hivis = ((-hisunalts >= (twilight*np.pi/180.)) * (hialts >= (minElevation*np.pi/180.)))
 

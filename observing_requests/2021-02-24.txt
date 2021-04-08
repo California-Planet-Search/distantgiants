@@ -1,0 +1,16 @@
+Total requested time = 1 hr. 10 min RVs + 1.5 hr. extra templates
+ 
+
+        T001173 13 10 43.8 +70 46 06 2000 vmag=11.0  632/1500 125k B3 1x out p3 DG ** template please add B-stars
+        T001269 16 38 47.3 +64 33 31 2000 vmag=11.6 1078/2700 125k B3 1x out p3 DG ** template please add B-stars
+        T001753 16 49 52.8 +61 10 25 2000 vmag=11.8 1312/2700 125k B3 1x out p3 DG ** template please add B-stars
+        T001244 17 05 07.3 +69 31 10 2000 vmag=11.9 1436/3600 125k B3 1x out p3 DG ** template please add B-stars
+        T001248 17 16 05.7 +63 06 22 2000 vmag=11.8 1282/2700 125k B3 1x out p3 DG ** template please add B-stars
+		
+		
+         135694 15 11 28.9 +71 50 28 2000  vmag=9.1   71/ 500  60k B5 1x  in p1 DG RV for Distant Giants
+        T001269 16 38 47.3 +64 33 31 2000 vmag=11.6  739/1500  60k C2 1x  in p1 DG RV for Distant Giants
+        T001753 16 49 52.8 +61 10 25 2000 vmag=11.8  900/2700  60k C2 1x  in p1 DG RV for Distant Giants
+        T001244 17 05 07.3 +69 31 10 2000 vmag=11.9  984/2700  60k C2 1x  in p1 DG RV for Distant Giants
+        T001248 17 16 05.7 +63 06 22 2000 vmag=11.8  879/1800  60k C2 1x  in p1 DG RV for Distant Giants
+        T001758 23 38 58.3 +75 41 06 2000 vmag=10.8  346/ 900  60k C2 1x  in p1 DG RV last chance before setting!

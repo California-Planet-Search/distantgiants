@@ -1,0 +1,18 @@
+Total requested time = 2631 seconds = 0 hr 43 min 51.0 sec
+ 
+        T001669 03 03 48.7 +83 35 15 2000    vmag=0    0/ 500  60k C2 1x  in p3 DG ** Jitter test
+        T001710 06 17 07.9 +76 12 39 2000    vmag=0    0/ 500  60k B5 1x  in p3 DG ** Jitter test
+        T001694 06 30 59.6 +66 21 39 2000    vmag=0    0/ 500  60k C2 1x  in p3 DG ** Jitter test
+         237566 07 00 19.9 +56 49 28 2000    vmag=0    0/ 500  60k B5 1x  in p3 DG ** Jitter test
+        T001723 07 47 11.3 +68 28 36 2000    vmag=0    0/ 500  60k B5 1x  in p3 DG ** Jitter test
+          93963 10 51 06.5 +25 38 28 2000    vmag=0    0/ 500  60k B5 1x  in p3 DG ** Jitter test
+        T001194 11 11 16.9 +69 57 53 2000    vmag=0    0/ 500  60k C2 1x  in p3 DG ** Jitter test
+        T001279 12 20 15.3 +56 12 04 2000    vmag=0    0/ 500  60k C2 1x  in p3 DG ** Jitter test
+   TIC142381532 13 04 52.9 +63 45 14 2000    vmag=0    0/ 500  60k C2 1x  in p3 DG ** Jitter test
+        T001824 13 10 55.5 +61 44 41 2000    vmag=0    0/ 500  60k B5 1x  in p3 DG ** Jitter test
+        T001173 13 10 43.8 +70 46 06 2000 vmag=11.0  632/1500 125k B3 1x out p3 DG ** template please add B-stars
+        WASP156 02 11 07.6 +02 25 05 2000 vmag=11.6  700/1500  60k C2 1x  in p1 DG RV for Distant Giants
+        T001173 13 10 43.8 +70 46 06 2000 vmag=11.0  433/ 900  60k C2 1x  in p2 DG RV for Distant Giants
+        T001249 13 22 14.8 +66 18 31 2000 vmag=11.1  454/1200  60k C2 1x  in p1 DG RV for Distant Giants
+        T001794 13 33 35.4 +49 03 40 2000 vmag=10.3  224/ 500  60k C2 1x  in p1 DG RV for Distant Giants
+        T001691 18 09 37.5 +86 51 35 2000 vmag=10.1  188/ 500  60k C2 1x  in p2 DG RV for Distant Giants

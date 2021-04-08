@@ -46,7 +46,7 @@ def obs_request_list_gen(overview_df):
     """
     overview_df = overview_df.sort_values(by = 'ra_deg').reset_index(drop = True)
     
-    observing_schedule_df = pd.read_csv('../jump-config/allocations/hires_j/hires_schedule_2021A.csv')[['Date', 'start', 'stop']].sort_values(by=['Date', 'start'])
+    observing_schedule_df = pd.read_csv('../jump-config/allocations/hires_j/hires_schedule_2020B.csv')[['Date', 'start', 'stop']].sort_values(by=['Date', 'start'])
     
     # The schedule has multiple rows for some nights because the nights were paid for by 2 programs. This chunk combines the duplicate lines and their night fractions. It can NOT account for non-contiguous observing periods. For example, if CPS has the first 1/4 of the night, then we hand off for the second 1/4, then we get it back for the second half, this chunk will think we have the whole night.
     
@@ -73,8 +73,13 @@ def obs_request_list_gen(overview_df):
     index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
     
     next_observing_date = observing_dates[index_of_next_date]
-
-    # next_observing_date = Time('2021-02-25', format='iso').jd
+    ##################
+    index_list = np.array([index_of_next_date+i for i in range(5)])
+    obs_dates = observing_dates[index_list]
+    starts = observing_schedule_df['start'][index_list].values
+    stops = observing_schedule_df['stop'][index_list].values
+    ##################
+    # next_observing_date = Time('2020-11-07', format='iso').jd
     
     
     time_gap = next_observing_date - Time.now().jd
@@ -108,16 +113,22 @@ def obs_request_list_gen(overview_df):
         Dec_new = sign + str(int(abs(Dec_deg))).zfill(2) +'d'+ str(int((abs(Dec_deg) - int(abs(Dec_deg)))*60)).zfill(2) +'m'+ str(int(np.round((((abs(Dec_deg) - int(abs(Dec_deg)))*60)%1)*60, 0))).zfill(2)+'s'
        
         star_object = Star.star(star_name, RA = RA_new, Dec = Dec_new)
-
+        print(star_name)
+        for j in range(len(obs_dates)):
             
-        observer_times = times.ObserverTimes(utc_date = Time(next_observing_date, format='jd').iso.split(' ')[0], night_kind = [start, stop])
-    
-        visibility = star_object.visibility(observer_times, verbose = False)
-    
-        visible_time = max([i[2] for i in star_object.visibility(observer_times, verbose = False)])
-
-        if visible_time < 0.5*u.h:
-            continue
+            observer_times = times.ObserverTimes(utc_date = Time(obs_dates[j], format='jd').iso.split(' ')[0], night_kind = [starts[j], stops[j]])
+        
+            visibility = star_object.visibility(observer_times, verbose = False)
+        
+            visible_time = max([i[2] for i in star_object.visibility(observer_times, verbose = False)])
+            print(visible_time)
+            if visible_time < 0.5*u.h:
+                if j == 0:
+                    continue
+                else:
+                    remaining_chances = j
+            else:
+                remaining_chances = 5
         
         for j in range(len(obs_type)):
             # Creating requests for recon, jitter, and templates
@@ -130,7 +141,7 @@ def obs_request_list_gen(overview_df):
                     if (obs_list[j]) == 'have_template_hires_j' and overview_df['tot_iodine_hires'][i] + overview_df['tot_iodine_apf'][i] < 3:
                         continue
                         
-                    request_list[j].append((overview_df['star_id'][i], obs_type[j], obs_prio[j], vmag, RA_deg, Dec_deg))
+                    request_list[j].append((overview_df['star_id'][i], obs_type[j], obs_prio[j], vmag, RA_deg, Dec_deg, remaining_chances))
            
             # Creating requests for cadence RVs  
             elif obs_type[j] == 'rv':
@@ -161,7 +172,7 @@ def obs_request_list_gen(overview_df):
                     prio = 0
               
                 
-                request_list[j].append((overview_df['star_id'][i], 'rv', prio, vmag, RA_deg, Dec_deg))
+                request_list[j].append((overview_df['star_id'][i], 'rv', prio, vmag, RA_deg, Dec_deg, remaining_chances))
         
     return request_list
 
@@ -194,6 +205,7 @@ def generator(star_requests):
             v_mag = j[3]
             RA_deg = j[4]
             Dec_deg = j[5]
+            remaining_chances = j[6]
 
             if prio == 0:
                 continue
@@ -247,7 +259,7 @@ def generator(star_requests):
                     decker = 'B1'
                 elif v_mag > 10:
                     decker = 'B3'
-                v_mag = 0
+                # v_mag = 0
                 
                 counts = 125
                 n_shots = '1x'
@@ -268,7 +280,10 @@ def generator(star_requests):
                 counts = 60
                 n_shots = '1x'
                 initials = 'DG'
-                string = 'RV for Distant Giants'
+                if remaining_chances > 4:
+                    string = 'RV for Distant Giants'
+                else:
+                    string = 'Only {} more chances!'.format(remaining_chances)
                 
             t_exp = int(np.round(exp.exposure_time(v_mag, counts, iod = iod_status)))
 

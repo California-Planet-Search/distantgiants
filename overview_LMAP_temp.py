@@ -36,8 +36,26 @@ def make_overview(plot = True, observability = False):
     distantgiants = pd.read_csv('csv/distantgiants.csv')
  
     sql_df = pd.read_csv('csv/Distant_Giants_Observing_Requests.csv')
+    
+    # gamma_df = pd.read_csv('csv/gamma_vals.csv')
+    gamma_df = pd.read_csv('csv/Distant_Giants_gamma.csv')
+    
+    
+    
+    rcs_df = pd.read_csv('csv/rcs_master.csv')[['CPS_NAME', 'Fit preferred (official file name without .py)']]\
+                                    .rename(columns={'CPS_NAME':'star_id','Fit preferred (official file name without .py)':'fit_pref'})
+    rcs_df['fit_pref'] = rcs_df['fit_pref'].fillna('default_cps')
+    
+    
+    gam_pref = gamma_df.merge(rcs_df, left_on = ['star_id', 'runname'], right_on = ['star_id', 'fit_pref']).drop(['runname','fit_pref'], axis=1)
+    gam_pref = gam_pref.drop_duplicates(subset='star_id')
+
+
 
     sql_df = pd.merge(distantgiants[['star_id', 'vmag', 'ra', 'dec']], sql_df, on = 'star_id', how = 'inner')
+    sql_df = pd.merge(sql_df, gam_pref, on = 'star_id', how = 'inner')
+    
+    
     
     
     # We want to find templates by excluding 10k recon spectra (on HIRES). 
@@ -169,35 +187,42 @@ def make_overview(plot = True, observability = False):
     overview_df['cooked?'] = cooked
     
     # I've commented this line out to keep from cutting on membership in distantgiants
-    overview_df = pd.merge(overview_df, sql_df.drop_duplicates(subset = 'star_id')[['star_id', 'vmag', 'ra', 'dec']], on = 'star_id')
+    overview_df = pd.merge(overview_df, sql_df.drop_duplicates(subset = 'star_id')[['star_id', 'vmag', 'ra', 'dec', 'dvdt', 'curv', 'u_dvdt', 'u_curv']], on = 'star_id')
     overview_df = overview_df.rename(columns = {'ra':'ra_deg', 'dec':'dec_deg'})
+
     
     if plot == True:
         # Creating plot_df with all of the information to create an image with an overview for each target
         plot_df = pd.merge(overview_df, recon_df.drop(columns = 'have_recon'), on = 'star_id')
         plot_df = pd.merge(plot_df, template_df, on = 'star_id', how = 'left')
-        plot_df = pd.merge(plot_df, jitter_df.drop(columns = 'have_jitter'), on = 'star_id')[['star_id', 'instrument_recon', 'bjd_recon', 'bjd_jitter', 'apf_template_bjd', 'hires_template_bjd', 'have_template','cooked?', 'ra_deg', 'dec_deg']]
+        plot_df = pd.merge(plot_df, jitter_df.drop(columns = 'have_jitter'), on = 'star_id')[['star_id', 'instrument_recon', 'tot_iodine_hires', 'tot_iodine_apf', 'bjd_recon', 'bjd_jitter', 'apf_template_bjd', 'hires_template_bjd', 'have_template','cooked?', 'ra_deg', 'dec_deg', 'dvdt', 'curv', 'u_dvdt', 'u_curv']]
         
         # Initializing variables for the plot
     
         y_length = np.arange(len(plot_df['star_id']))[::-1]
 
         y_increment = (y_length[1]-y_length[0])
-        display_window = 100
+        # display_window = 100
         keck = Observer.at_site('W. M. Keck Observatory') # Site for astroplan to get sunrise/set
         observatory = obs.setupObservatory('keck') # Site for Ian's observing code
 
-        start_date = Time.now().jd-2*display_window/3
-        end_date = Time.now().jd+display_window/3
+        # start_date = Time.now().jd-2*display_window/3
+        # end_date = Time.now().jd+display_window/3
+        
+        # Display from Aug. 1 2019 up to 1 month from now
+        start_date = Time('2019-08-01', format='isot').jd
+        end_date = Time.now().jd+30
+        
+        display_window = end_date - start_date
         sidereal_offset = 0.002731 # This is how much earlier a target rises each day (in days)
 
         # Dates to display on the x-axis. Roughly one tick per month by dividing the window by 30
-        date_intervals_jd = np.linspace(start_date, end_date, int(display_window/30 + 1))
+        date_intervals_jd = np.linspace(start_date, end_date, int(display_window/90 + 1))
         date_intervals_iso = Time(date_intervals_jd, format = 'jd', out_subfmt = 'date').iso
 
         recon_color = 'green'
         template_color = 'black'
-        jitter_color = 'pink'
+        jitter_color = 'blue'
         color_hires = 'red'
         color_apf = 'blue'
 
@@ -205,7 +230,7 @@ def make_overview(plot = True, observability = False):
         # Making the plot
         ######################
 
-        fig, ax = plt.subplots(figsize=(10, 8), dpi= 100, facecolor='w', edgecolor='k')
+        fig, ax = plt.subplots(figsize=(10, 10), dpi= 100, facecolor='w', edgecolor='k')
 
         z_order_list = z_order_list = ['observability', 'h_line_plot', 'rv_pts', 'recon_pts', 'template_pts', 'jitter_pts', 'recon_arrows', 'jitter_arrows']
 
@@ -217,15 +242,18 @@ def make_overview(plot = True, observability = False):
         plot_df = plot_df.sort_values(by = 'ra_deg', ignore_index = True)
 
         # Plotting the dates of each star's recon and jitter
-        recon_pts = ax.scatter(plot_df['bjd_recon'], y_length, color = recon_color, s=6, zorder = z_order_list.index('recon_pts'))
-        jitter_pts = ax.scatter(plot_df['bjd_jitter'], y_length, color = jitter_color, s=6, zorder = z_order_list.index('jitter_pts'))
-        apf_template_pts = ax.scatter(plot_df['apf_template_bjd'], y_length, color = 'black', marker = '*', s=30, zorder = z_order_list.index('template_pts'))
-        hires_template_pts = ax.scatter(plot_df['hires_template_bjd'], y_length, color = 'black', marker = '*', s=30, zorder = z_order_list.index('template_pts'))
+        # recon_pts = ax.scatter(plot_df['bjd_recon'], y_length, color = recon_color, s=6, zorder = z_order_list.index('recon_pts'))
+        # jitter_pts = ax.scatter(plot_df['bjd_jitter'], y_length, color = jitter_color, s=6, zorder = z_order_list.index('jitter_pts'))
+        # apf_template_pts = ax.scatter(plot_df['apf_template_bjd'], y_length, color = 'black', marker = '*', s=30, zorder = z_order_list.index('template_pts'))
+        # hires_template_pts = ax.scatter(plot_df['hires_template_bjd'], y_length, color = 'black', marker = '*', s=30, zorder = z_order_list.index('template_pts'))
 
-        ax.text(end_date+10, y_length[0]+1, 'Template?', size = 8)
-        ax.text(start_date-15, y_length[0]+1, 'Jitter?', size = 8)
-        cooked = [] # List determining which stars already have significant obs and shouldn't be observed
+        ax.text(end_date+3, y_length[0]+1, 'Nobs', size = 12)
+        ax.text(end_date+38, y_length[0]+1, r'$\dot{\gamma}$', size = 14)
+        ax.text(end_date+50, y_length[0]+1, r'$\ddot{\gamma}$', size = 14)
+        # ax.text(start_date-15, y_length[0]+1, 'Jitter?', size = 8)
+        cooked = [] # List determining which stars already have sufficient obs and shouldn't be observed
         
+
         for i in range(len(plot_df)):
             
             if plot_df['have_template'][i] == 'YES':
@@ -237,13 +265,29 @@ def make_overview(plot = True, observability = False):
                 jitter_facecolors = 'b'
             else: 
                 jitter_facecolors = 'none'
+                
+            if abs(plot_df['dvdt'][i]) > 0 and abs(plot_df['dvdt'][i]) >= 3*abs(plot_df['u_dvdt'][i]):
+                trend_facecolors = 'k'
+            else:
+                trend_facecolors = 'none'
+            
+            if abs(plot_df['curv'][i]) > 0 and abs(plot_df['curv'][i]) >= 3*abs(plot_df['u_curv'][i]):
+                curv_facecolors = 'k'
+            else:
+                curv_facecolors = 'none'
 
 
             # Open or closed circle to show template status
-            ax.scatter(end_date+14.5, y_length[i], s=10, marker = 'o', color = 'k', facecolors = template_facecolors, clip_on=False)
-
-            # Open or closed circle to show jitter status
-            ax.scatter(start_date-12.5, y_length[i], s=10, marker = 'o', color = 'k', facecolors = jitter_facecolors, clip_on=False)
+            # ax.scatter(end_date+14.5, y_length[i], s=10, marker = 'o', color = 'k', facecolors = template_facecolors, clip_on=False)
+            # print(plot_df.head(10))
+            # print(overview_df.head(10))
+            # fdf
+            
+            # Plotting number of observations per target
+            ax.text(end_date+3, y_length[i]-.3, s='{:.0f}'.format(plot_df.iloc[i]['tot_iodine_hires'] + plot_df.iloc[i]['tot_iodine_apf']), size=12)
+            
+            ax.scatter(end_date+42, y_length[i], s=14, marker = 'o', color = 'k', facecolors = trend_facecolors, clip_on=False)
+            ax.scatter(end_date+54, y_length[i], s=14, marker = 'o', color = 'k', facecolors = curv_facecolors, clip_on=False)
 
             # Put star name on right and left vertical axes, with cooked targets faded
             if plot_df['cooked?'][i] == 'cookin':
@@ -252,8 +296,8 @@ def make_overview(plot = True, observability = False):
                 alpha = 0.5
 
             # Plotting the name of each star on the y-axis
-            ax.text(start_date-1, y_length[i]+0.3*y_increment, plot_df['star_id'][i], size = 7, alpha = alpha, horizontalalignment = 'right')
-            ax.text(end_date+1, y_length[i]+0.3*y_increment, plot_df['star_id'][i], size = 7, alpha = alpha)
+            ax.text(start_date-1, y_length[i]+0.3*y_increment, plot_df['star_id'][i], size = 11, alpha = alpha, horizontalalignment = 'right')
+            # ax.text(end_date+1, y_length[i]+0.3*y_increment, plot_df['star_id'][i], size = 7, alpha = alpha)
 
             # If a target got recon or jitter before the earliest displayed date, use an arrow
             if plot_df['bjd_recon'][i] < start_date:
@@ -361,7 +405,7 @@ def make_overview(plot = True, observability = False):
         cadenced_hires_rvs = ax.scatter(cadenced_hires_dates, cadenced_hires_y - 0.15*(y_length[1]-y_length[0]), marker = 'v', 
                                  color = color_hires, s = 10, zorder=z_order_list.index('rv_pts'))
 
-        cadenced_apf_rvs = ax.scatter(cadenced_apf_dates, cadenced_apf_y - 0.15*(y_length[1]-y_length[0]), marker = 'v', 
+        cadenced_apf_rvs = ax.scatter(cadenced_apf_dates, cadenced_apf_y - 0.15*(y_length[1]-y_length[0]), marker = 'v',
                                  color = color_apf, s = 10, zorder=z_order_list.index('rv_pts'))
         
         
@@ -385,31 +429,31 @@ def make_overview(plot = True, observability = False):
     
         # The dates in the schedule are given for Hawaii time at midnight that morning. If we start observing Jan 1 at 6 pm Hawaii time, then the JD is Jan 2 at 5 am. 6 pm is early, but we don't need to be too precise because we are going to find the next sunset time anyway.
         observing_dates = Time(observing_schedule_df['Date'].values.tolist(), format='iso').jd + 1 + 5/24
-    
+        
     
         # Uses the fact that dates are in chronological order, so the min index corresponds to the earliest date
-        index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
+        # index_of_next_date = min([np.where(observing_dates == i) for i in observing_dates if i > Time.now().jd])[0][0]
         
         ############
 
 
-        line_today, = ax.plot((Time.now().jd, Time.now().jd), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dashed')
-        line_15, = ax.plot((Time.now().jd-15, Time.now().jd-15), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dotted')
-        line_25, = ax.plot((Time.now().jd-25, Time.now().jd-25), (y_length[0], y_length[-1]), c = 'black', linestyle = 'dashdot')
+        # line_today, = ax.plot((Time.now().jd, Time.now().jd), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dashed')
+        # line_15, = ax.plot((Time.now().jd-15, Time.now().jd-15), (y_length[0], y_length[-1]), c = 'gray', linestyle = 'dotted')
+        # line_25, = ax.plot((Time.now().jd-25, Time.now().jd-25), (y_length[0], y_length[-1]), c = 'black', linestyle = 'dashdot')
         
-        next_obs = [observing_dates[index_of_next_date+n] for n in range(5)]
-        # next_obs = [Time('2021-02-21', format = 'iso').jd]
-        for i in next_obs:
-            line_next_obs, = ax.plot((i, i), (y_length[0], y_length[-1]), linewidth = 1, c = 'red')
+        # next_obs = [observing_dates[index_of_next_date+n] for n in range(5)]
+#         # next_obs = [Time('2021-02-21', format = 'iso').jd]
+#         for i in next_obs:
+#             line_next_obs, = ax.plot((i, i), (y_length[0], y_length[-1]), linewidth = 1, c = 'red')
 
-        plt.xticks(date_intervals_jd, date_intervals_iso, fontsize = 8)
+        plt.xticks(date_intervals_jd, date_intervals_iso, fontsize = 12)
 
 
         plt.yticks([], [], size = 14)
-        ax.legend([recon_pts, jitter_pts, hires_template_pts, apf_template_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15, line_next_obs], ['Recon', 'Jitter', 'HIRES Template', 'APF Template', 'HIRES', 'APF', 'Today', '25', '15', 'Future Nights'], loc = (0.10,1.02), prop = {'size':10}, ncol = 4);
+        ax.legend([cadenced_hires_rvs, cadenced_apf_rvs], ['HIRES', 'APF'], loc = (0.33,1.02), prop = {'size':14}, ncol = 4);
         fig.tight_layout()
         plt.savefig('csv/overview_plot.jpg', dpi = 500, quality=95)
-        plt.show()
+        # plt.show()
         
     
     return overview_df
@@ -422,4 +466,4 @@ def update_overview(overview_df):
 
 if __name__ == "__main__":
     
-   update_overview(make_overview(plot = True, observability = False))
+   update_overview(make_overview(plot = True, observability = True))

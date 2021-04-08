@@ -6,17 +6,17 @@ from astropy.coordinates import SkyCoord
 from astroquery.gaia import Gaia
 
 def update_manual_cuts_2(verbose = False):
-    # Set the search radius - I've noticed that if you set it too small, it misses some targets, weirdly?
-    # So I usually set it large at the beginning then cut the list down
+    # "Set the search radius - I've noticed that if you set it too small, it misses some targets, weirdly?
+    # So I usually set it large at the beginning then cut the list down" - Mason
     radius = 300     # units of arcsec
     width = u.Quantity(radius, u.arcsec)
     height = u.Quantity(radius, u.arcsec)
 
 
-    distantgiants_photo = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/distantgiants_photo.csv')
+    distantgiants_photo = pd.read_csv('csv/distantgiants_photo.csv')
 
-    # These are all photo targets, but with MES and qlp information included. This df is made MANUALLY from distantgiants_photo, so it will not update automatically if new TOIs are added to tois_perfect.csv
-    manual_cuts_1 = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/manual_cuts_1.csv')
+    # These are all photo targets, but with MES > 12 and qlp_only == NO information included. This df is made MANUALLY from distantgiants_photo, so it will not update automatically if new TOIs are added to tois_perfect.csv
+    manual_cuts_1 = pd.read_csv('csv/manual_cuts_1.csv')
     manual_cuts_1 = manual_cuts_1.query("`qlp_only?`== False and MES >= 12.0")
 
     # Merge to get ra and dec
@@ -60,8 +60,8 @@ def update_manual_cuts_2(verbose = False):
             if verbose:
                 print('bumpin it down a lil')
 
-            cutoff -= increment
-            dist_condition = np.sqrt((ra - r['ra'])**2 + (dec-r['dec'])**2)*3600 < cutoff
+            sep_cutoff -= increment
+            dist_condition = np.sqrt((ra - r['ra'])**2 + (dec-r['dec'])**2)*3600 < sep_cutoff
         
         
             primary_index_list = r[ mag_condition & dist_condition ].index
@@ -70,9 +70,11 @@ def update_manual_cuts_2(verbose = False):
         # ra and dec values according to Gaia
         primary_ra = r['ra'][primary_star_index]
         primary_dec = r['dec'][primary_star_index]
+        primary_mag = r['phot_g_mean_mag'][primary_star_index]
     
         # This number is the distance cutoff to look for companions in arcsec (currently 5 arcsec)
-        cutoff = 5   # arcsec
+        distance_cutoff = 5   # arcsec
+        mag_cutoff = 5 # magnitudes
         line_list = []
 
         for companion_index in range(len(r)):
@@ -82,10 +84,11 @@ def update_manual_cuts_2(verbose = False):
             comp_mag = r['phot_g_mean_mag'][companion_index]
         
             distance = np.sqrt((primary_ra - comp_ra)**2 + (primary_dec - comp_dec)**2)*3600
-            distance = distance
+            delta_mag = np.abs(primary_mag - comp_mag)
     #         print('distance is ',distance)
-        
-            if distance < cutoff:
+            
+            # Both criteria must be met to be considered a close companion
+            if distance < distance_cutoff and delta_mag < mag_cutoff:
                 if verbose:
                     print('made the 5 cut')
                 line = pd.DataFrame([[star_id, comp_ra, comp_dec, distance, comp_mag]], columns=['star_id', 'ra', 'dec', 'distance', 'gmag'])
