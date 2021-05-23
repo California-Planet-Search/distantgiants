@@ -26,8 +26,14 @@ def make_distantgiants():
     # print('number of SC2A in Ashley list:', len(overlap))
     # The following are columns that I want displayed in the distantgiants paper
     relevant_columns = ['tic', 'star_id', 'toi', 'ra', 'dec', 'vmag', 'teff', 'mass', 'radius', 'vsini', 'logrhk', 'sval', 'ruwe', 'rp', 'period'] # Add in per and svalue
-    distantgiants = pd.merge(observing_priorities['tic'], distantgiants_spec, how = 'inner', on = 'tic').rename(columns={'Rp':'rp', 'Rs':'radius', 'smass':'mass'})[relevant_columns].sort_values(by='toi')
-
+    
+    ###################
+    ## I used to compose DG of only targets assigned by Ashley's code. I'm taking this out because it only removes cooked targets, which I actually want to include in final analysis.
+    # distantgiants = pd.merge(observing_priorities['tic'], distantgiants_spec, how = 'inner', on = 'tic').rename(columns={'Rp':'rp', 'Rs':'radius', 'smass':'mass'})[relevant_columns].sort_values(by='toi')
+    
+    distantgiants = distantgiants_spec
+    ###################
+    
     distantgiants.to_csv('csv/distantgiants.csv', index = False)
     
     return distantgiants

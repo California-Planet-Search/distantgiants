@@ -34,7 +34,7 @@ def make_overview(plot = True, observability = False):
     """
     
     distantgiants = pd.read_csv('csv/distantgiants.csv')
- 
+
     sql_df = pd.read_csv('csv/Distant_Giants_Observing_Requests.csv')
 
     sql_df = pd.merge(distantgiants[['star_id', 'vmag', 'ra', 'dec']], sql_df, on = 'star_id', how = 'inner')
@@ -167,11 +167,12 @@ def make_overview(plot = True, observability = False):
         else:
             cooked.append('cookin')
     overview_df['cooked?'] = cooked
-    
+
+
     # I've commented this line out to keep from cutting on membership in distantgiants
     overview_df = pd.merge(overview_df, sql_df.drop_duplicates(subset = 'star_id')[['star_id', 'vmag', 'ra', 'dec']], on = 'star_id')
     overview_df = overview_df.rename(columns = {'ra':'ra_deg', 'dec':'dec_deg'})
-    
+
     if plot == True:
         # Creating plot_df with all of the information to create an image with an overview for each target
         plot_df = pd.merge(overview_df, recon_df.drop(columns = 'have_recon'), on = 'star_id')
@@ -224,7 +225,7 @@ def make_overview(plot = True, observability = False):
 
         ax.text(end_date+10, y_length[0]+1, 'Template?', size = 8)
         ax.text(start_date-15, y_length[0]+1, 'Jitter?', size = 8)
-        cooked = [] # List determining which stars already have significant obs and shouldn't be observed
+        # cooked = [] # List determining which stars already have significant obs and shouldn't be observed
         
         for i in range(len(plot_df)):
             

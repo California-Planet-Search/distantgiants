@@ -81,7 +81,7 @@ def obs_request_list_gen(overview_df):
     
     
     start = observing_schedule_df['start'][index_of_next_date]
-    stop = observing_schedule_df['stop'][index_of_next_date]
+    stop =observing_schedule_df['stop'][index_of_next_date]
     # start, stop = 0, 1
     
     request_list = [[], [], [], []]

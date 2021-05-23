@@ -466,4 +466,4 @@ def update_overview(overview_df):
 
 if __name__ == "__main__":
     
-   update_overview(make_overview(plot = True, observability = True))
+   update_overview(make_overview(plot = True, observability = False))

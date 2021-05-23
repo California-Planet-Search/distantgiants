@@ -17,6 +17,9 @@ from astropy.time import Time
 import matplotlib.pyplot as plt
 from git import repo
 
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+
 def make_distantgiants_spec(distantgiants_photo):
     """
     Creates spec_cuts, the dataframe of all SC2A stars on Jump that pass spectroscopic cuts. Then writes spec_cuts out to
@@ -24,7 +27,7 @@ def make_distantgiants_spec(distantgiants_photo):
     """
     
     # manual_cuts_1 is the manually-compiled set of targets that pass MES>12 and NOT qlp-only. manual_cuts_2 is the result of enforcing another cut on close companions using Gaia DR2 data
-    manual_cuts_2 = pd.read_csv('/Users/judahvz/research/code/GitHub/distantgiants/csv/manual_cuts_2.csv')
+    manual_cuts_2 = pd.read_csv('csv/manual_cuts_2.csv')
     print('{} targets from distantgiants_photo pass manual cuts'.format(len(manual_cuts_2)))
     
     ###################
@@ -35,24 +38,30 @@ def make_distantgiants_spec(distantgiants_photo):
     spec_values = pd.read_csv('csv/TKS_-_Distant_Giants_Spectroscopic_Properties.csv')
     
     # Take the logrhk and vsini/teff values that correspond to the highest-SNR observation
-    logrhk_sval_df = spec_values.dropna(subset=['logrhk', 'sval']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep='last')[['star_id', 'logrhk', 'sval']]
+    logrhk_sval_df = spec_values.dropna(subset=['logrhk', 'sval']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep='last')[['star_id', 'observation_id', 'logrhk', 'sval']]
     vsini_teff_df = spec_values.dropna(subset=['teff', 'vsini']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep = 'last')[['star_id', 'vsini', 'teff']]
     
+    # logrhk_sval_df.to_csv('quick_logrhk.csv')
+    # vsini_teff_df.to_csv('quick_vsini_Teff.csv')
     # print('{} targets have APF/HIRES observations, {} have logrhk values, and {} have vsini/teff values'.format(len(spec_values.drop_duplicates(subset='star_id')), len(logrhk_df), len(vsini_teff_df)))
     
 
     distantgiants_spec = pd.merge(distantgiants_photo.rename(columns = {'Vmag':'vmag'}), logrhk_sval_df, left_on = 'cps', right_on = 'star_id', how='left').drop(columns='star_id').rename(columns={'cps':'star_id'})
     distantgiants_spec = pd.merge(distantgiants_spec, vsini_teff_df, on = 'star_id', how='left')
 
-    # I have removed these for now to have a robust, 'for sure' list. If we want to add in targets that don't have spec properties later, I can use it
+    ## Removing cuts on logr'hk to avoid losing targets. The list of 45 are those that originally passed our spec cuts
     distantgiants_spec['vsini'].replace(np.nan, -100, inplace = True)
     distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
     distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)
-    print(distantgiants_spec.query('star_id == "T001180"')[['logrhk', 'teff', 'vsini']])
-
-    distantgiants_spec = distantgiants_spec.query('teff < 6250 and vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
-
-
+    # distantgiants_spec = distantgiants_spec.query('teff < 6250 and vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
+    
+    # # samp47 is a list of the 44 stars assigned to SC2A by Ashley's code, one target (T002088) assigned to another program, and 2 cooked targets not assigned to SC2A (219134, 75732)
+    samp47 = pd.read_csv('csv/samp47.csv')
+    distantgiants_spec = distantgiants_spec.merge(samp47, on = 'star_id', how='inner')
+    # print(distantgiants_spec.sort_values(by='star_id', ignore_index=True).star_id)
+    # print(samp47.sort_values(by='star_id', ignore_index=True).star_id)
+    # dfd
+    
     distantgiants_spec.sort_values(by='toi').to_csv('csv/distantgiants_spec.csv', index = False)
 
   
