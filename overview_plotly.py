@@ -9,7 +9,8 @@ import plotly.express as px
 pd.options.mode.chained_assignment = None
 
 
-sql_df = pd.read_csv('csv/sql_df.csv')
+# sql_df = pd.read_csv('csv/sql_df.csv')
+sql_df = pd.read_csv('csv/Distant_Giants_Observing_Requests.csv')
 
 def obs_type(dataframe, hires_template_counts = 6e4, apf_template_counts = 9e7, radius = 5):
     """

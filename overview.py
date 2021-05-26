@@ -35,10 +35,26 @@ def make_overview(plot = True, observability = False):
     
     distantgiants = pd.read_csv('csv/distantgiants.csv')
 
+    gamma_df = pd.read_csv('csv/Distant_Giants_gamma.csv')
+
     sql_df = pd.read_csv('csv/Distant_Giants_Observing_Requests.csv')
 
     sql_df = pd.merge(distantgiants[['star_id', 'vmag', 'ra', 'dec']], sql_df, on = 'star_id', how = 'inner')
     
+    
+
+    rcs_df = pd.read_csv('csv/rcs_master.csv')[['CPS_NAME', 'Fit preferred (official file name without .py)']]\
+                                    .rename(columns={'CPS_NAME':'star_id','Fit preferred (official file name without .py)':'fit_pref'})
+    rcs_df['fit_pref'] = rcs_df['fit_pref'].fillna('default_cps')
+
+    # gam_pref is shorter than distantgiants, meaning that not every target has a preferred radvel fit. Not urgent, but address later
+    gam_pref = gamma_df.merge(rcs_df, left_on = ['star_id', 'runname'], right_on = ['star_id', 'fit_pref']).drop(['runname','fit_pref'], axis=1)
+    gam_pref = gam_pref.drop_duplicates(subset='star_id')
+
+    sql_df = pd.merge(sql_df, gam_pref, on = 'star_id', how = 'left')
+
+
+
     
     # We want to find templates by excluding 10k recon spectra (on HIRES). 
     # 5.4E8 counts on APF is the same as 60k on HIRES, so a recon spectrum on APF would have ~9E7 counts
@@ -139,7 +155,7 @@ def make_overview(plot = True, observability = False):
                         inplace=True)
 
     overview_df.update(overview_df[['tot_iodine_hires', 'tot_iodine_apf']].fillna(0))
-    overview_df.update(overview_df[['last_obs_hires', 'last_obs_apf']].fillna('NEVER'))
+    overview_df.update(overview_df[['last_obs_hires', 'last_obs_apf']].fillna(np.inf))
     overview_df.update(overview_df[['baseline_hires', 'baseline_apf']].fillna('N/A'))
     
     # Add a new column 'cooked?' to indicate any target with both a 3+ year baseline and 40+ observations. 
@@ -170,14 +186,14 @@ def make_overview(plot = True, observability = False):
 
 
     # I've commented this line out to keep from cutting on membership in distantgiants
-    overview_df = pd.merge(overview_df, sql_df.drop_duplicates(subset = 'star_id')[['star_id', 'vmag', 'ra', 'dec']], on = 'star_id')
+    overview_df = pd.merge(overview_df, sql_df.drop_duplicates(subset = 'star_id')[['star_id', 'vmag', 'ra', 'dec', 'dvdt', 'curv', 'u_dvdt', 'u_curv']], on = 'star_id')
     overview_df = overview_df.rename(columns = {'ra':'ra_deg', 'dec':'dec_deg'})
 
     if plot == True:
         # Creating plot_df with all of the information to create an image with an overview for each target
         plot_df = pd.merge(overview_df, recon_df.drop(columns = 'have_recon'), on = 'star_id')
         plot_df = pd.merge(plot_df, template_df, on = 'star_id', how = 'left')
-        plot_df = pd.merge(plot_df, jitter_df.drop(columns = 'have_jitter'), on = 'star_id')[['star_id', 'instrument_recon', 'bjd_recon', 'bjd_jitter', 'apf_template_bjd', 'hires_template_bjd', 'have_template','cooked?', 'ra_deg', 'dec_deg']]
+        plot_df = pd.merge(plot_df, jitter_df.drop(columns = 'have_jitter'), on = 'star_id')[['star_id', 'instrument_recon', 'tot_iodine_hires', 'tot_iodine_apf', 'bjd_recon', 'bjd_jitter', 'apf_template_bjd', 'hires_template_bjd', 'have_template', 'cooked?', 'last_obs_hires', 'last_obs_apf', 'ra_deg', 'dec_deg', 'dvdt', 'curv', 'u_dvdt', 'u_curv']]
         
         # Initializing variables for the plot
     
@@ -223,38 +239,53 @@ def make_overview(plot = True, observability = False):
         apf_template_pts = ax.scatter(plot_df['apf_template_bjd'], y_length, color = 'black', marker = '*', s=30, zorder = z_order_list.index('template_pts'))
         hires_template_pts = ax.scatter(plot_df['hires_template_bjd'], y_length, color = 'black', marker = '*', s=30, zorder = z_order_list.index('template_pts'))
 
-        ax.text(end_date+10, y_length[0]+1, 'Template?', size = 8)
-        ax.text(start_date-15, y_length[0]+1, 'Jitter?', size = 8)
-        # cooked = [] # List determining which stars already have significant obs and shouldn't be observed
-        
+
+        ax.text(end_date+3, y_length[0]+1, 'Nobs', size = 12)
+        ax.text(end_date+17, y_length[0]+1, 'Last Obs', size = 12)
+        ax.text(end_date+37, y_length[0]+1, r'$\dot{\gamma}$', size = 14)
+        ax.text(end_date+43, y_length[0]+1, r'$\ddot{\gamma}$', size = 14)
+
         for i in range(len(plot_df)):
-            
-            if plot_df['have_template'][i] == 'YES':
-                template_facecolors = 'k'
-            elif plot_df['have_template'][i] == 'NO':
-                template_facecolors = 'none'
-
-            if str(plot_df['bjd_jitter'][i]) != 'nan':
-                jitter_facecolors = 'b'
-            else: 
-                jitter_facecolors = 'none'
-
-
-            # Open or closed circle to show template status
-            ax.scatter(end_date+14.5, y_length[i], s=10, marker = 'o', color = 'k', facecolors = template_facecolors, clip_on=False)
-
-            # Open or closed circle to show jitter status
-            ax.scatter(start_date-12.5, y_length[i], s=10, marker = 'o', color = 'k', facecolors = jitter_facecolors, clip_on=False)
 
             # Put star name on right and left vertical axes, with cooked targets faded
             if plot_df['cooked?'][i] == 'cookin':
                 alpha = 1
             elif plot_df['cooked?'][i] == 'COOKED':
                 alpha = 0.5
+            
+            ###############
+            if abs(plot_df['dvdt'][i]) > 0 and abs(plot_df['dvdt'][i]) >= 3*abs(plot_df['u_dvdt'][i]):
+                trend_facecolors = 'k'
+            else:
+                trend_facecolors = 'none'
+            
+            if abs(plot_df['curv'][i]) > 0 and abs(plot_df['curv'][i]) >= 3*abs(plot_df['u_curv'][i]):
+                curv_facecolors = 'k'
+            else:
+                curv_facecolors = 'none'
+            ################
+            
+            last_obs = np.min([plot_df.iloc[i]['last_obs_hires'], plot_df.iloc[i]['last_obs_apf']])
+            
+            gap_list = [20, 30, 60]
+            color_list = ['gold', 'orange', 'red']
+            
+            last_obs_color = 'k'
+            for j in range(len(gap_list)):
+                if last_obs > gap_list[j]:
+                    last_obs_color = color_list[j]
+            
+            
+            # Number of iodine-in obs for each target
+            ax.text(end_date+3, y_length[i]-.3, s='{:.0f}'.format(plot_df.iloc[i]['tot_iodine_hires'] + plot_df.iloc[i]['tot_iodine_apf']), size=12)
+            ax.text(end_date+17, y_length[i]-.3, s='{:.0f}'.format(last_obs), size=12, color=last_obs_color)
+            
+            ax.scatter(end_date+38, y_length[i], s=14, marker = 'o', color = 'k', facecolors = trend_facecolors, clip_on=False)
+            ax.scatter(end_date+44, y_length[i], s=14, marker = 'o', color = 'k', facecolors = curv_facecolors, clip_on=False)
 
             # Plotting the name of each star on the y-axis
             ax.text(start_date-1, y_length[i]+0.3*y_increment, plot_df['star_id'][i], size = 7, alpha = alpha, horizontalalignment = 'right')
-            ax.text(end_date+1, y_length[i]+0.3*y_increment, plot_df['star_id'][i], size = 7, alpha = alpha)
+            # ax.text(end_date+1, y_length[i]+0.3*y_increment, plot_df['star_id'][i], size = 7, alpha = alpha)
 
             # If a target got recon or jitter before the earliest displayed date, use an arrow
             if plot_df['bjd_recon'][i] < start_date:
@@ -409,7 +440,7 @@ def make_overview(plot = True, observability = False):
         plt.yticks([], [], size = 14)
         ax.legend([recon_pts, jitter_pts, hires_template_pts, apf_template_pts, cadenced_hires_rvs, cadenced_apf_rvs, line_today, line_25, line_15, line_next_obs], ['Recon', 'Jitter', 'HIRES Template', 'APF Template', 'HIRES', 'APF', 'Today', '25', '15', 'Future Nights'], loc = (0.10,1.02), prop = {'size':10}, ncol = 4);
         fig.tight_layout()
-        plt.savefig('csv/overview_plot.jpg', dpi = 500, quality=95)
+        plt.savefig('csv/overview_plot.jpg', dpi = 500, pil_kwargs={'quality':95})
         plt.show()
         
     

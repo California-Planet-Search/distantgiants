@@ -82,6 +82,7 @@ def obs_request_list_gen(overview_df):
     
     start = observing_schedule_df['start'][index_of_next_date]
     stop =observing_schedule_df['stop'][index_of_next_date]
+    # print(start, stop)
     # start, stop = 0, 1
     
     request_list = [[], [], [], []]
@@ -136,15 +137,20 @@ def obs_request_list_gen(overview_df):
             elif obs_type[j] == 'rv':
                 if overview_df['last_obs_hires'][i] == 'NEVER':
                     hires_never = True
+                    hires_days = np.inf
+
                 else:
                     hires_never = False
                     hires_days = float(overview_df['last_obs_hires'][i]) + time_gap # Computes days that will have passed since last obs on the actual day of observation
     
                 if overview_df['last_obs_apf'][i] == 'NEVER':
                     apf_never = True
+                    apf_days = np.inf
+
                 else:
                     apf_never = False
                     apf_days = float(overview_df['last_obs_apf'][i])
+                    
                 if (hires_never or hires_days > 25)\
                 and (apf_never or apf_days > 25):
                     prio = 1
@@ -159,9 +165,14 @@ def obs_request_list_gen(overview_df):
  #                    prio = 4
                 else:
                     prio = 0
+                
+                if hires_never and apf_never:
+                    days_since = -1
+                else:
+                    days_since = np.min([hires_days, apf_days])
               
                 
-                request_list[j].append((overview_df['star_id'][i], 'rv', prio, vmag, RA_deg, Dec_deg))
+                request_list[j].append((overview_df['star_id'][i], 'rv', prio, vmag, RA_deg, Dec_deg, days_since))
         
     return request_list
 
@@ -268,7 +279,8 @@ def generator(star_requests):
                 counts = 60
                 n_shots = '1x'
                 initials = 'DG'
-                string = 'RV for Distant Giants'
+                days_since = j[6]
+                string = '{:.0f} days since last obs'.format(days_since)
                 
             t_exp = int(np.round(exp.exposure_time(v_mag, counts, iod = iod_status)))
 
