@@ -38,26 +38,44 @@ def make_distantgiants_spec(distantgiants_photo):
     spec_values = pd.read_csv('csv/TKS_-_Distant_Giants_Spectroscopic_Properties.csv')
     
     # Take the logrhk and vsini/teff values that correspond to the highest-SNR observation
-    logrhk_sval_df = spec_values.dropna(subset=['logrhk', 'sval']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep='last')[['star_id', 'observation_id', 'logrhk', 'sval']]
-    vsini_teff_df = spec_values.dropna(subset=['teff', 'vsini']).sort_values(by=['star_id', 'counts']).drop_duplicates(subset='star_id', keep = 'last')[['star_id', 'vsini', 'teff']]
+    logrhk_sval_df = spec_values.dropna(subset=['logrhk', 'sval'])\
+                                .sort_values(by=['star_id', 'counts'])\
+                                .drop_duplicates(subset='star_id', keep='last')\
+                                [['star_id', 'observation_id', 'logrhk', 'sval']]
+                                
+    vsini_teff_df = spec_values.dropna(subset=['teff', 'vsini'])\
+                               .sort_values(by=['star_id', 'counts'])\
+                               .drop_duplicates(subset='star_id', keep = 'last')[['star_id', 'vsini', 'teff']]
+                               
     
-    # logrhk_sval_df.to_csv('quick_logrhk.csv')
-    # vsini_teff_df.to_csv('quick_vsini_Teff.csv')
-    # print('{} targets have APF/HIRES observations, {} have logrhk values, and {} have vsini/teff values'.format(len(spec_values.drop_duplicates(subset='star_id')), len(logrhk_df), len(vsini_teff_df)))
-    
-
-    distantgiants_spec = pd.merge(distantgiants_photo.rename(columns = {'Vmag':'vmag'}), logrhk_sval_df, left_on = 'cps', right_on = 'star_id', how='left').drop(columns='star_id').rename(columns={'cps':'star_id'})
+    distantgiants_spec = pd.merge(distantgiants_photo.rename(columns = {'Vmag':'vmag'}),\
+                                  logrhk_sval_df, left_on = 'cps', right_on = 'star_id', how='left')\
+                                      .drop(columns='star_id').rename(columns={'cps':'star_id'})
     distantgiants_spec = pd.merge(distantgiants_spec, vsini_teff_df, on = 'star_id', how='left')
 
-    ## Removing cuts on logr'hk to avoid losing targets. The list of 45 are those that originally passed our spec cuts
-    distantgiants_spec['vsini'].replace(np.nan, -100, inplace = True)
-    distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
-    distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)
-    # distantgiants_spec = distantgiants_spec.query('teff < 6250 and vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
+    ## Removing cuts on logr'hk to avoid losing targets.
+    # distantgiants_spec['vsini'].replace(np.nan, -100, inplace = True)
+    # distantgiants_spec['logrhk'].replace(np.nan, -100, inplace = True)
+    # distantgiants_spec['teff'].replace(np.nan, -100, inplace = True)
+    # Remove cuts on spec parameters. We set the 47-target sample below, and some targets fluctuate above -4.7 logrhk.
+    #distantgiants_spec = distantgiants_spec.query('teff < 6250 and vsini <= 5.00 and logrhk < -4.7').reset_index(drop = True)
     
-    # # samp47 is a list of the 44 stars assigned to SC2A by Ashley's code, one target (T002088) assigned to another program, and 2 cooked targets not assigned to SC2A (219134, 75732)
+    # # samp47 is a list of the 44 stars assigned to SC2A by Ashley's code, one target (T002088) assigned to another program, and 2 cooked targets not assigned to SC2A (219134, 75732).
+    # Because samp47 has the final say on spectroscopic cuts, this module is basically obsolete. I keep it for historical purposes.
+    # Some targets, (T001235, HIP70705, and T001772) were not selected by Ashley's code despite passing all cuts.
+    
+    ## These lines are unrelated to spec. They just update vmag, ra, and dec with values from Jump.
+    ## The original values are from tois_perfect and are inaccurate in some cases.
+    dg_updates = pd.read_csv('csv/Distant_Giants_Update_Params.csv')
+    distantgiants_spec = distantgiants_spec.merge(dg_updates, on='star_id')
+    distantgiants_spec['vmag'] = distantgiants_spec['vmag_new'].fillna(distantgiants_spec['vmag'])
+    distantgiants_spec['ra'] = distantgiants_spec['ra_new'].fillna(distantgiants_spec['ra'])
+    distantgiants_spec['dec'] = distantgiants_spec['dec_new'].fillna(distantgiants_spec['dec'])
+    distantgiants_spec = distantgiants_spec.drop(columns=['ra_new', 'dec_new', 'vmag_new'])
+
     samp47 = pd.read_csv('csv/samp47.csv')
     distantgiants_spec = distantgiants_spec.merge(samp47, on = 'star_id', how='inner')
+    print('47-target sample enforced in tks_distantgiants_spec.py')
     # print(distantgiants_spec.sort_values(by='star_id', ignore_index=True).star_id)
     # print(samp47.sort_values(by='star_id', ignore_index=True).star_id)
     # dfd

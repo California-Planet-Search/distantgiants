@@ -24,8 +24,8 @@ def make_distantgiants_photo():
     """
     Accesses the selected_TOIs spreadsheet so that SC2A can be regularly updated.
     
-    Performs photometric cuts on selected_TOIs and writes out the stars that pass to tks_distgiants_pool.txt, which is in the
-    jump-config repo.
+    Performs photometric cuts on selected_TOIs and writes out the stars that 
+    pass to tks_distgiants_pool.txt, which is in the jump-config repo.
     
     Pushes the changes made to tks_distgiants_photo.txt to the jump-config Github.
     """
@@ -33,9 +33,14 @@ def make_distantgiants_photo():
     # Uncomment these to get original
     tois_perfect_location = '../tks_target_list_gen/prioritization/info/TOIs_perfect.csv'
     column_changes = {'cps_name':'cps', 'm_s':'smass', 'r_s':'sradius'}
+    
 
     tois_perfect = pd.read_csv(tois_perfect_location).rename(columns = column_changes)
     tois_perfect = tois_perfect[['tic','toi','cps','ra','dec','vmag','smass','sradius','evol','ruwe','rp', 'period']]
+
+    # The 194-day period of TOI 1823 aka TIC142381532 was later found to be 194/5 = 38.8 days
+    ind_1823 = tois_perfect[tois_perfect['cps']=='TIC142381532'].index
+    tois_perfect.at[ind_1823, 'period'] = 38.8
 
     tks_drop = pd.read_csv('csv/tks_drop.csv')
     
@@ -43,12 +48,18 @@ def make_distantgiants_photo():
     for column in ['dec', 'smass', 'ruwe', 'vmag', 'rp']:
         tois_perfect['{}'.format(column)] = tois_perfect['{}'.format(column)].astype(float)
     ## Photometric Cuts
-    tois_perfect = tois_perfect.drop_duplicates(subset = 'cps')
 
     ############
     # change ruwe condition back to ruwe < 1.3
-    tois_perfect = tois_perfect.query('dec > 0 and evol=="MS" and not ruwe >= 1.3 and vmag <= 12 and rp < 10 and smass > 0.5 and smass < 1.5')
-
+    tois_perfect = tois_perfect.query('dec > 0 and evol=="MS"\
+                                               and not ruwe >= 1.3\
+                                               and vmag <= 12.5\
+                                               and rp < 10\
+                                               and smass > 0.5\
+                                               and smass < 1.5')
+    
+    # Now that photo cuts have been applied to all multis (not just the first planet in the system), we can drop duplicates.
+    tois_perfect = tois_perfect.drop_duplicates(subset = 'cps')
     ############
     tois_perfect = tois_perfect.rename(columns = {'vmag' : 'Vmag', 'sradius' : 'Rs', 'rp' : 'Rp'}).reset_index(drop=True)
     ############
@@ -65,6 +76,8 @@ def make_distantgiants_photo():
     distantgiants_photo = tois_perfect[['cps','toi','tic','ra','dec','Vmag','Rs', 'smass', 'Rp', 'ruwe', 'evol', 'period']]
     distantgiants_photo = distantgiants_photo[~distantgiants_photo['cps'].isin(tks_drop['Name'])].reset_index(drop = True) # Drop any stars that are in tks_drop
     
+    # No longer updating dg_photo because it doesn't affect downstream anyway: the target list is frozen
+    # The list of targets passing photo cuts is still longer than it was though, because of added TOIs after we locked in
     # distantgiants_photo.to_csv('csv/distantgiants_photo.csv', index = False)
     return distantgiants_photo
 

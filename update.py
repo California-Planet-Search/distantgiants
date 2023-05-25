@@ -22,7 +22,9 @@ tks_photo.update_distantgiants_photo(tks_photo.make_distantgiants_photo())
 tks_spec.update_distantgiants_spec(tks_spec.make_distantgiants_spec(tks_photo.make_distantgiants_photo()))
 tks.update_distantgiants(tks.make_distantgiants())
 
-ov.update_overview(ov.make_overview(plot = True, observability = False))
+overview_df = ov.make_overview(plot=False, observability=False)
+ov.update_overview(overview_df)
+ov.update_trends(overview_df)
 generator(obs_request_list_gen(init_overview(iers=False)))
 
 
